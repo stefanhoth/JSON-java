@@ -229,9 +229,10 @@ public class TestJSONStringer extends TestCase
             string = jj.object().key("bosanda").value("MARIE HAA'S")
                     .key("bosanda").value("MARIE HAA\\'S").endObject()
                     .toString();
-            fail("expecting JSONException here.");
+            
         } catch (JSONException jsone)
-        {
+        {  
+        	//fail("NOT expecting JSONException here.");
             assertEquals("Duplicate key \"bosanda\"", jsone.getMessage());
         }
     }
