@@ -151,14 +151,15 @@ public class JSONArray extends ArrayList{
      * @param collection     A Collection.
      */
     public JSONArray(Collection collection) {
-        super();
-//    	this.myArrayList = new ArrayList();
-        if (collection != null) {
-            Iterator iter = collection.iterator();
-            while (iter.hasNext()) {
-                super.add(JSONObject.wrap(iter.next()));
-            }
-        }
+        super((collection == null)?new ArrayList():collection);
+//    	if(collection == null)collection = new ArrayList();
+////    	this.myArrayList = new ArrayList();
+//        if (collection != null) {
+//            Iterator iter = collection.iterator();
+//            while (iter.hasNext()) {
+//                super.add(JSONObject.wrap(iter.next()));
+//            }
+//        }
     }
 
 
@@ -633,6 +634,7 @@ public class JSONArray extends ArrayList{
      * @return      this.
      */
     public JSONArray put(Map value) {
+    	if(value == null )value = new JSONObject();
         super.add(new JSONObject(value));
         return this;
     }
@@ -682,7 +684,7 @@ public class JSONArray extends ArrayList{
             throw new JSONException("JSONArray[" + index + "] not found.");
         }
         if (index < this.length()) {
-            super.set(index, value);
+            super.set(index, new JSONArray(value));
         } else {
             while (index != this.length()) {
                 this.put(JSONObject.NULL);
@@ -754,7 +756,7 @@ public class JSONArray extends ArrayList{
              throw new JSONException("JSONArray[" + index + "] not found.");
          }
          if (index < this.length()) {
-             super.set(index, value);
+             super.set(index, new JSONObject(value));
          } else {
              while (index != this.length()) {
                  this.put(JSONObject.NULL);

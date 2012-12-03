@@ -590,7 +590,7 @@ public class TestJSONObject extends TestCase
                     jsonobject.toString());
 
             Collection<Object> collection = null;
-            Map<String, Object> map = null;
+            Map<String, Object> map = null;//new HashMap<String, Object>();
 
             jsonobject = new JSONObject(map);
             jsonarray = new JSONArray(collection);

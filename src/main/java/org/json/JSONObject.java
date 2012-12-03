@@ -240,18 +240,18 @@ public class JSONObject extends HashMap{
      * @throws JSONException
      */
     public JSONObject(Map map) {
-       super();
+       super(map == null? new JSONObject():map );
     	//this.map = new HashMap();
-        if (map != null) {
-            Iterator i = map.entrySet().iterator();
-            while (i.hasNext()) {
-                Map.Entry e = (Map.Entry)i.next();
-                Object value = e.getValue();
-                if (value != null) {
-                    super.put(e.getKey(), wrap(value));
-                }
-            }
-        }
+//        if (map != null) {
+//            Iterator i = map.entrySet().iterator();
+//            while (i.hasNext()) {
+//                Map.Entry e = (Map.Entry)i.next();
+//                Object value = e.getValue();
+//                if (value != null) {
+//                    super.put(e.getKey(), wrap(value));
+//                }
+//            }
+//        }
     }
 
 
@@ -353,6 +353,8 @@ public class JSONObject extends HashMap{
                     target = nextTarget;
                 }
                 target.put(path[last], bundle.getString((String)key));
+//                System.out.println("REMOVE:"+(String)key+" "+bundle.getString((String)key)+" "+this);
+                
             }
         }
     }
@@ -696,7 +698,7 @@ public class JSONObject extends HashMap{
      *  the value is the JSONObject.NULL object.
      */
     public boolean isNull(String key) {
-    	System.out.println("REMOVE:"+this.opt(key));
+//    	System.out.println("REMOVE:"+this.opt(key));
         return JSONObject.NULL.equals(this.opt(key));
     }
 
@@ -1098,7 +1100,8 @@ public class JSONObject extends HashMap{
      * @throws JSONException
      */
     public JSONObject put(String key, Map value) throws JSONException {
-        super.put(key, new JSONObject(value));
+        if(value == null )value= new JSONObject();
+    	super.put(key, value);
         return this;
     }
 

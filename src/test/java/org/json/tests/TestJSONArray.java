@@ -1380,6 +1380,8 @@ public class TestJSONArray extends TestCase
             jsonarray = new JSONArray();
             jsonarray.put(0, a);
             jsonarray.put(1, b);
+            //changed from normal get to getJSONObject 
+            //as .get() is intended to return the original underlying object
             assertEquals(new JSONObject(a).toString(), jsonarray.get(0).toString());
             assertEquals(new JSONObject(b).toString(), jsonarray.get(1).toString());
             jsonarray.put(0, c);
