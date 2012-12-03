@@ -32,8 +32,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -93,7 +93,7 @@ import java.util.Set;
  * @author JSON.org
  * @version 2012-10-27
  */
-public class JSONObject extends HashMap{
+public class JSONObject extends LinkedHashMap{
 
     /**
      * JSONObject.NULL is equivalent to the value that JavaScript calls null,

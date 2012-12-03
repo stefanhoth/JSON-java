@@ -975,7 +975,7 @@ public class TestJSONArray extends TestCase
                     "bdd", "fdsa", "fds", "ewre", "rer", "gfs"
             });
             assertEquals(
-                    "{\"gfs\":{\"abc\":\"123\"},\"fdsa\":\"-12\",\"bdd\":\"123\",\"ewre\":-98,\"rer\":[\"abc\"],\"fds\":45}",
+                    "{\"bdd\":\"123\",\"fdsa\":\"-12\",\"fds\":45,\"ewre\":-98,\"rer\":[\"abc\"],\"gfs\":{\"abc\":\"123\"}}",
                     jsonarray.toJSONObject(names).toString());
             assertEquals(null, jsonarray.toJSONObject(new JSONArray()));
             assertEquals(null, jsonarray.toJSONObject(null));
@@ -1461,7 +1461,7 @@ public class TestJSONArray extends TestCase
 		jsonobject.put("a","old");
 		jsonarray.put(jsonobject);
 		jsonobject.put("b","new");
-		assertEquals("[{\"b\":\"new\",\"a\":\"old\"}]",jsonarray.toString());
+		assertEquals("[{\"a\":\"old\",\"b\":\"new\"}]",jsonarray.toString());
     }
     
 }

@@ -661,13 +661,17 @@ public class TestJSONTokener extends TestCase
             jsontokener = new JSONTokener(
                     "{op:'test', to:'session', pre:1}{op:'test', to:'session', pre:2}");
             jsonobject = new JSONObject(jsontokener);
-            assertEquals("{\"to\":\"session\",\"op\":\"test\",\"pre\":1}",
+            assertEquals(
+            		//"{\"to\":\"session\",\"op\":\"test\",\"pre\":1}",
+            		"{\"op\":\"test\",\"to\":\"session\",\"pre\":1}",
                     jsonobject.toString());
             assertEquals(1, jsonobject.optInt("pre"));
             int i = jsontokener.skipTo('{');
             assertEquals(123, i);
             jsonobject = new JSONObject(jsontokener);
-            assertEquals("{\"to\":\"session\",\"op\":\"test\",\"pre\":2}",
+            assertEquals(
+            		//"{\"to\":\"session\",\"op\":\"test\",\"pre\":2}",
+            		"{\"op\":\"test\",\"to\":\"session\",\"pre\":2}",
                     jsonobject.toString());
         } catch (JSONException e)
         {
