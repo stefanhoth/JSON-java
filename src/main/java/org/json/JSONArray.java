@@ -30,7 +30,6 @@ import java.io.Writer;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -586,6 +585,18 @@ public class JSONArray extends ArrayList{
         super.add(new JSONArray(value));
         return this;
     }
+    
+    /**
+     * Put a value in the JSONArray, where the value will be a
+     * JSONArray which is produced from a Collection.
+     * Do not wrap JSONArray, pass by value
+     * @param value A Collection value.
+     * @return      this.
+     */
+    public JSONArray put(JSONArray value) {
+    	super.add(value);
+    	return this;
+    }
 
 
     /**
@@ -637,6 +648,20 @@ public class JSONArray extends ArrayList{
     	if(value == null )value = new JSONObject();
         super.add(new JSONObject(value));
         return this;
+    }
+    
+    /**
+     * samarjit for jsonobject same ref rather than a copy, in earlier
+     * version this jsonarray.put usually went to jsonarray.put(Object)
+     * Put a value in the JSONArray, where the value will be a
+     * JSONObject which is produced from a Map.
+     * @param value A Map value.
+     * @return      this.
+     */
+    public JSONArray put(JSONObject value) {
+    	if(value == null )value = new JSONObject();
+    	super.add(value);
+    	return this;
     }
 
 

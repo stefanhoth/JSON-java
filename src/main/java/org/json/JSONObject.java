@@ -240,18 +240,32 @@ public class JSONObject extends HashMap{
      * @throws JSONException
      */
     public JSONObject(Map map) {
-       super(map == null? new JSONObject():map );
+//       super(map == null? new JSONObject():map ); //dont it needs to be wrapped
     	//this.map = new HashMap();
-//        if (map != null) {
-//            Iterator i = map.entrySet().iterator();
-//            while (i.hasNext()) {
-//                Map.Entry e = (Map.Entry)i.next();
-//                Object value = e.getValue();
-//                if (value != null) {
-//                    super.put(e.getKey(), wrap(value));
-//                }
-//            }
-//        }
+        if (map != null) {
+            Iterator i = map.entrySet().iterator();
+            while (i.hasNext()) {
+                Map.Entry e = (Map.Entry)i.next();
+                Object value = e.getValue();
+                if (value != null) {
+                    super.put(e.getKey(), wrap(value));
+                }
+            }
+        }
+    }
+
+    /**
+     * Put a key/value pair in the JSONObject, where the value will be a
+     * JSONObject which is produced from a Map.
+     * For put(k,JSONObject value) would be call by ref. unlike wrapped Map as above. 
+     * @param key   A key string.
+     * @param value A Map value.
+     * @return      this.
+     * @throws JSONException
+     */
+    public JSONObject put(String key, JSONObject value) throws JSONException {
+    	super.put(key,value);
+    	return this;
     }
 
 

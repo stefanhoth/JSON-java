@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONArray;
+import org.json.JSONML;
 import org.json.JSONObject;
 
 
@@ -40,6 +41,15 @@ public class MyTest {
         
 		System.out.println(jsonobject.toString());
 
+		 String string = "<recipe name=\"bread\" prep_time=\"5 mins\" cook_time=\"3 hours\"> <title>Basic bread</title> <ingredient amount=\"8\" unit=\"dL\">Flour</ingredient> <ingredient amount=\"10\" unit=\"grams\">Yeast</ingredient> <ingredient amount=\"4\" unit=\"dL\" state=\"warm\">Water</ingredient> <ingredient amount=\"1\" unit=\"teaspoon\">Salt</ingredient> <instructions> <step>Mix all ingredients together.</step> <step>Knead thoroughly.</step> <step>Cover with a cloth, and leave for one hour in warm room.</step> <step>Knead again.</step> <step>Place in a bread baking tin.</step> <step>Cover with a cloth, and leave for one hour in warm room.</step> <step>Bake in the oven at 180(degrees)C for 30 minutes.</step> </instructions> </recipe> ";
+
+        jsonobject = JSONML.toJSONObject(string);
+       
+		System.out.println(jsonobject.toString());
+		System.out.println( JSONML.toString(jsonobject));
+		
+		jsonarray = JSONML.toJSONArray(string);
+		System.out.println(jsonarray);
 	}
 
 }
