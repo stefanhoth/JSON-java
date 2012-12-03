@@ -1439,4 +1439,29 @@ public class TestJSONArray extends TestCase
         }
     }
     
+    /**
+     * This should call JSONArray.put(JSONArray value) hence pass by ref
+     */
+    public void testPassByRefJSONArray(){
+    	JSONArray localar = new JSONArray();
+		jsonarray = new JSONArray();
+		localar.put("old");
+		jsonarray.put(localar);
+		localar.put("new");
+		assertEquals("[[\"old\",\"new\"]]",jsonarray.toString());
+    }
+    
+    /**
+     * This should call JSONArray.put(JSONObject value) instead of JSONObject.put(Map value) 
+     * to simulate pass by ref
+     */
+    public void testPassByRefJSONObject(){
+    	JSONObject jsonobject = new JSONObject();
+		jsonarray = new JSONArray();
+		jsonobject.put("a","old");
+		jsonarray.put(jsonobject);
+		jsonobject.put("b","new");
+		assertEquals("[{\"b\":\"new\",\"a\":\"old\"}]",jsonarray.toString());
+    }
+    
 }

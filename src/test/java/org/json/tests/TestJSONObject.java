@@ -2507,4 +2507,29 @@ public class TestJSONObject extends TestCase
         assertEquals("1.0E89", JSONObject.doubleToString(10e88));
         assertEquals("1.0E89", JSONObject.doubleToString(10E88));
     }
+    
+    /**
+     * This should call JSONObject.put(Object value) hence pass by ref
+     */
+    public void testPassByRefJSONArray(){
+    	jsonobject = new JSONObject();
+		jsonarray = new JSONArray();
+		jsonarray.put("old");
+		jsonobject.put("ar",jsonarray);
+		jsonarray.put("new");
+		assertEquals("{\"ar\":[\"old\",\"new\"]}",jsonobject.toString());
+    }
+    
+    /**
+     * This should call JSONObject.put(JSONObject value) instead of JSONObject.put(Map value) 
+     * to simulate pass by ref
+     */
+    public void testPassByRefJSONObject(){
+    	jsonobject = new JSONObject();
+    	JSONObject localobj = new JSONObject();
+    	localobj.put("a","old");
+    	jsonobject.put("passrefmap",localobj);
+		localobj.put("b","new");
+		assertEquals("{\"passrefmap\":{\"b\":\"new\",\"a\":\"old\"}}",jsonobject.toString());
+    }
 }

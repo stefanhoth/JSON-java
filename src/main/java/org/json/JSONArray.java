@@ -589,7 +589,7 @@ public class JSONArray extends ArrayList{
     /**
      * Put a value in the JSONArray, where the value will be a
      * JSONArray which is produced from a Collection.
-     * Do not wrap JSONArray, pass by value
+     * Do not wrap JSONArray, pass by ref
      * @param value A Collection value.
      * @return      this.
      */
@@ -668,7 +668,7 @@ public class JSONArray extends ArrayList{
     /**
      * Append an object value. This increases the array's length by one.
      * @param value An object value.  The value should be a
-     *  Boolean, Double, Integer, JSONArray, JSONObject, Long, or String, or the
+     *  Boolean, Double, Integer, JSONArray,<strike> JSONObject,</strike> Long, or String, or the
      *  JSONObject.NULL object.
      * @return this.
      */

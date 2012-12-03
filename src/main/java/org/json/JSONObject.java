@@ -1125,7 +1125,7 @@ public class JSONObject extends HashMap{
      * then the key will be removed from the JSONObject if it is present.
      * @param key   A key string.
      * @param value An object which is the value. It should be of one of these
-     *  types: Boolean, Double, Integer, JSONArray, JSONObject, Long, String,
+     *  types: Boolean, Double, Integer, JSONArray, <strike>JSONObject,</strike> Long, String,
      *  or the JSONObject.NULL object.
      * @return this.
      * @throws JSONException If the value is non-finite number

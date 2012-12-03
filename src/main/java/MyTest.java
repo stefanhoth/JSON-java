@@ -22,7 +22,7 @@ public class MyTest {
 		//"stoogearray":[["Curly","Larry","Moe"]],"array":[null,null]}
 //{"stooge":"Shemp","stooges":["Curly","Larry","Moe"],"stoogearray":["Curly","Larry","Moe"],"array":[]}
 		
-        Collection<Object> collection = new ArrayList<Object>();
+       /* Collection<Object> collection = new ArrayList<Object>();
         Map<String, Object> map =  new HashMap<String, Object>();
 
         JSONObject jsonobject = new JSONObject(map);
@@ -49,7 +49,13 @@ public class MyTest {
 		System.out.println( JSONML.toString(jsonobject));
 		
 		jsonarray = JSONML.toJSONArray(string);
-		System.out.println(jsonarray);
+		System.out.println(jsonarray);*/
+		JSONObject jsonobject = new JSONObject();
+    	JSONObject localobj = new JSONObject();
+    	localobj.put("a","old");
+    	jsonobject.put("passre",localobj);
+		localobj.put("b","new");
+		System.out.println(jsonobject.toString());
 	}
 
 }
