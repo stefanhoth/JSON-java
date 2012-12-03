@@ -24,6 +24,6 @@ public class SampleResourceBundle_en_US extends ListResourceBundle {
         { "ASCII", "American Standard Code for Information Interchange" },
         { "JAVA.desc", "Just Another Vague Acronym" },
         { "JAVA.data", "Sweet language" },
-        { "JSON", "JavaScript Object Notation" },
+        { "JSON", "JavaScript Object Notation" }
     };
 }

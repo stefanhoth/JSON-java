@@ -362,7 +362,7 @@ public class TestXML extends TestCase
         String XMLString = "<abc \"abc\"=\"123\">123</abc>";
         JSONObject jo = new JSONObject();
         JSONObject jo2 = new JSONObject();
-        jo2.put("content", 123);
+        jo2.put("#content", 123);
         jo2.put("abc", 123);
         jo.put("abc", jo2);
         assertEquals(jo.toString(), XML.toJSONObject(XMLString).toString());
@@ -396,7 +396,7 @@ public class TestXML extends TestCase
             String XMLString = "<abc \"abc&nbsp;\">123</abc>";
             JSONObject jo = new JSONObject();
             JSONObject jo2 = new JSONObject();
-            jo2.put("content", 123);
+            jo2.put("#content", 123);
             jo2.put("abc&nbsp;", "");
             jo.put("abc", jo2);
             assertEquals(jo.toString(), XML.toJSONObject(XMLString).toString());
@@ -626,7 +626,7 @@ public class TestXML extends TestCase
         try
         {
             JSONObject jo = new JSONObject();
-            jo.put("content", 45);
+            jo.put("#content", 45);
             assertEquals("<my name>45</my name>", XML.toString(jo, "my name"));
         } catch (JSONException e)
         {
@@ -645,7 +645,7 @@ public class TestXML extends TestCase
             JSONArray ja = new JSONArray();
             ja.put("123");
             ja.put(72);
-            jo.put("content", ja);
+            jo.put("#content", ja);
             assertEquals("<my name>123\n72</my name>", XML.toString(jo, "my name"));
         } catch (JSONException e)
         {
@@ -661,7 +661,7 @@ public class TestXML extends TestCase
         try
         {
             JSONObject jo = new JSONObject();
-            jo.put("content", "42");
+            jo.put("#content", "42");
             assertEquals("<my name>42</my name>", XML.toString(jo, "my name"));
         } catch (JSONException e)
         {
@@ -854,11 +854,11 @@ public class TestXML extends TestCase
         jsonobject = XML
                 .toJSONObject("<![CDATA[This is a collection of test patterns and examples for json.]]>  Ignore the stuff past the end.  ");
         assertEquals(
-                "{\"content\":\"This is a collection of test patterns and examples for json.\"}",
+                "{\"#content\":\"This is a collection of test patterns and examples for json.\"}",
                 jsonobject.toString());
         assertEquals(
                 "This is a collection of test patterns and examples for json.",
-                jsonobject.getString("content"));
+                jsonobject.getString("#content"));
 
         string = "<test><blank></blank><empty/></test>";
         jsonobject = XML.toJSONObject(string);
@@ -869,7 +869,7 @@ public class TestXML extends TestCase
         string = "<subsonic-response><playlists><playlist id=\"476c65652e6d3375\" int=\"12345678901234567890123456789012345678901234567890213991133777039355058536718668104339937\"/><playlist id=\"50617274792e78737066\"/></playlists></subsonic-response>";
         jsonobject = XML.toJSONObject(string);
         assertEquals(
-                "{\"subsonic-response\":{\"playlists\":{\"playlist\":[{\"id\":\"476c65652e6d3375\",\"int\":\"12345678901234567890123456789012345678901234567890213991133777039355058536718668104339937\"},{\"id\":\"50617274792e78737066\"}]}}}",
+                "{\"subsonic-response\":{\"playlists\":{\"playlist\":[{\"@id\":\"476c65652e6d3375\",\"@int\":\"12345678901234567890123456789012345678901234567890213991133777039355058536718668104339937\"},{\"@id\":\"50617274792e78737066\"}]}}}",
                 jsonobject.toString());
     }
     
@@ -902,13 +902,15 @@ public class TestXML extends TestCase
 			                + "</ns1:doGoogleSearch>"
 			                + "</SOAP-ENV:Body></SOAP-ENV:Envelope>");
 		
-
+			 
         assertEquals(
-                "{\"SOAP-ENV:Envelope\": {\n  \"SOAP-ENV:Body\": {\"ns1:doGoogleSearch\": {\n    \"oe\": {\n      \"content\": \"latin1\",\n      \"xsi:type\": \"xsd:string\"\n    },\n    \"SOAP-ENV:encodingStyle\": \"http://schemas.xmlsoap.org/soap/encoding/\",\n    \"lr\": {\"xsi:type\": \"xsd:string\"},\n    \"start\": {\n      \"content\": 0,\n      \"xsi:type\": \"xsd:int\"\n    },\n    \"q\": {\n      \"content\": \"'+search+'\",\n      \"xsi:type\": \"xsd:string\"\n    },\n    \"ie\": {\n      \"content\": \"latin1\",\n      \"xsi:type\": \"xsd:string\"\n    },\n    \"safeSearch\": {\n      \"content\": false,\n      \"xsi:type\": \"xsd:boolean\"\n    },\n    \"xmlns:ns1\": \"urn:GoogleSearch\",\n    \"restrict\": {\"xsi:type\": \"xsd:string\"},\n    \"filter\": {\n      \"content\": true,\n      \"xsi:type\": \"xsd:boolean\"\n    },\n    \"maxResults\": {\n      \"content\": 10,\n      \"xsi:type\": \"xsd:int\"\n    },\n    \"key\": {\n      \"content\": \"GOOGLEKEY\",\n      \"xsi:type\": \"xsd:string\"\n    }\n  }},\n  \"xmlns:xsd\": \"http://www.w3.org/1999/XMLSchema\",\n  \"xmlns:xsi\": \"http://www.w3.org/1999/XMLSchema-instance\",\n  \"xmlns:SOAP-ENV\": \"http://schemas.xmlsoap.org/soap/envelope/\"\n}}",
+                //"{\"SOAP-ENV:Envelope\": {\n  \"SOAP-ENV:Body\": {\"ns1:doGoogleSearch\": {\n    \"oe\": {\n      \"content\": \"latin1\",\n      \"xsi:type\": \"xsd:string\"\n    },\n    \"SOAP-ENV:encodingStyle\": \"http://schemas.xmlsoap.org/soap/encoding/\",\n    \"lr\": {\"xsi:type\": \"xsd:string\"},\n    \"start\": {\n      \"content\": 0,\n      \"xsi:type\": \"xsd:int\"\n    },\n    \"q\": {\n      \"content\": \"'+search+'\",\n      \"xsi:type\": \"xsd:string\"\n    },\n    \"ie\": {\n      \"content\": \"latin1\",\n      \"xsi:type\": \"xsd:string\"\n    },\n    \"safeSearch\": {\n      \"content\": false,\n      \"xsi:type\": \"xsd:boolean\"\n    },\n    \"xmlns:ns1\": \"urn:GoogleSearch\",\n    \"restrict\": {\"xsi:type\": \"xsd:string\"},\n    \"filter\": {\n      \"content\": true,\n      \"xsi:type\": \"xsd:boolean\"\n    },\n    \"maxResults\": {\n      \"content\": 10,\n      \"xsi:type\": \"xsd:int\"\n    },\n    \"key\": {\n      \"content\": \"GOOGLEKEY\",\n      \"xsi:type\": \"xsd:string\"\n    }\n  }},\n  \"xmlns:xsd\": \"http://www.w3.org/1999/XMLSchema\",\n  \"xmlns:xsi\": \"http://www.w3.org/1999/XMLSchema-instance\",\n  \"xmlns:SOAP-ENV\": \"http://schemas.xmlsoap.org/soap/envelope/\"\n}}",
+        		"{\"SOAP-ENV:Envelope\": {\n  \"@xmlns:SOAP-ENV\": \"http://schemas.xmlsoap.org/soap/envelope/\",\n  \"@xmlns:xsi\": \"http://www.w3.org/1999/XMLSchema-instance\",\n  \"@xmlns:xsd\": \"http://www.w3.org/1999/XMLSchema\",\n  \"SOAP-ENV:Body\": {\"ns1:doGoogleSearch\": {\n    \"@xmlns:ns1\": \"urn:GoogleSearch\",\n    \"@SOAP-ENV:encodingStyle\": \"http://schemas.xmlsoap.org/soap/encoding/\",\n    \"key\": {\n      \"@xsi:type\": \"xsd:string\",\n      \"#content\": \"GOOGLEKEY\"\n    },\n    \"q\": {\n      \"@xsi:type\": \"xsd:string\",\n      \"#content\": \"'+search+'\"\n    },\n    \"start\": {\n      \"@xsi:type\": \"xsd:int\",\n      \"#content\": \"0\"\n    },\n    \"maxResults\": {\n      \"@xsi:type\": \"xsd:int\",\n      \"#content\": \"10\"\n    },\n    \"filter\": {\n      \"@xsi:type\": \"xsd:boolean\",\n      \"#content\": \"true\"\n    },\n    \"restrict\": {\"@xsi:type\": \"xsd:string\"},\n    \"safeSearch\": {\n      \"@xsi:type\": \"xsd:boolean\",\n      \"#content\": \"false\"\n    },\n    \"lr\": {\"@xsi:type\": \"xsd:string\"},\n    \"ie\": {\n      \"@xsi:type\": \"xsd:string\",\n      \"#content\": \"latin1\"\n    },\n    \"oe\": {\n      \"@xsi:type\": \"xsd:string\",\n      \"#content\": \"latin1\"\n    }\n  }}\n}}",
                 jsonobject.toString(2));
 
         assertEquals(
-                "<SOAP-ENV:Envelope><SOAP-ENV:Body><ns1:doGoogleSearch><oe>latin1<xsi:type>xsd:string</xsi:type></oe><SOAP-ENV:encodingStyle>http://schemas.xmlsoap.org/soap/encoding/</SOAP-ENV:encodingStyle><lr><xsi:type>xsd:string</xsi:type></lr><start>0<xsi:type>xsd:int</xsi:type></start><q>&apos;+search+&apos;<xsi:type>xsd:string</xsi:type></q><ie>latin1<xsi:type>xsd:string</xsi:type></ie><safeSearch>false<xsi:type>xsd:boolean</xsi:type></safeSearch><xmlns:ns1>urn:GoogleSearch</xmlns:ns1><restrict><xsi:type>xsd:string</xsi:type></restrict><filter>true<xsi:type>xsd:boolean</xsi:type></filter><maxResults>10<xsi:type>xsd:int</xsi:type></maxResults><key>GOOGLEKEY<xsi:type>xsd:string</xsi:type></key></ns1:doGoogleSearch></SOAP-ENV:Body><xmlns:xsd>http://www.w3.org/1999/XMLSchema</xmlns:xsd><xmlns:xsi>http://www.w3.org/1999/XMLSchema-instance</xmlns:xsi><xmlns:SOAP-ENV>http://schemas.xmlsoap.org/soap/envelope/</xmlns:SOAP-ENV></SOAP-ENV:Envelope>",
+                //"<SOAP-ENV:Envelope><SOAP-ENV:Body><ns1:doGoogleSearch><oe>latin1<xsi:type>xsd:string</xsi:type></oe><SOAP-ENV:encodingStyle>http://schemas.xmlsoap.org/soap/encoding/</SOAP-ENV:encodingStyle><lr><xsi:type>xsd:string</xsi:type></lr><start>0<xsi:type>xsd:int</xsi:type></start><q>&apos;+search+&apos;<xsi:type>xsd:string</xsi:type></q><ie>latin1<xsi:type>xsd:string</xsi:type></ie><safeSearch>false<xsi:type>xsd:boolean</xsi:type></safeSearch><xmlns:ns1>urn:GoogleSearch</xmlns:ns1><restrict><xsi:type>xsd:string</xsi:type></restrict><filter>true<xsi:type>xsd:boolean</xsi:type></filter><maxResults>10<xsi:type>xsd:int</xsi:type></maxResults><key>GOOGLEKEY<xsi:type>xsd:string</xsi:type></key></ns1:doGoogleSearch></SOAP-ENV:Body><xmlns:xsd>http://www.w3.org/1999/XMLSchema</xmlns:xsd><xmlns:xsi>http://www.w3.org/1999/XMLSchema-instance</xmlns:xsi><xmlns:SOAP-ENV>http://schemas.xmlsoap.org/soap/envelope/</xmlns:SOAP-ENV></SOAP-ENV:Envelope>",
+        		"<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsi=\"http://www.w3.org/1999/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/1999/XMLSchema\"><SOAP-ENV:Body><ns1:doGoogleSearch xmlns:ns1=\"urn:GoogleSearch\" SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><key xsi:type=\"xsd:string\">GOOGLEKEY</key><q xsi:type=\"xsd:string\">&apos;+search+&apos;</q><start xsi:type=\"xsd:int\">0</start><maxResults xsi:type=\"xsd:int\">10</maxResults><filter xsi:type=\"xsd:boolean\">true</filter><restrict xsi:type=\"xsd:string\"></restrict><safeSearch xsi:type=\"xsd:boolean\">false</safeSearch><lr xsi:type=\"xsd:string\"></lr><ie xsi:type=\"xsd:string\">latin1</ie><oe xsi:type=\"xsd:string\">latin1</oe></ns1:doGoogleSearch></SOAP-ENV:Body></SOAP-ENV:Envelope>",
                 XML.toString(jsonobject));
     	} catch (JSONException e) {
 			fail(e.toString());
@@ -1012,7 +1014,8 @@ public class TestXML extends TestCase
             string = "<person created=\"2006-11-11T19:23\" modified=\"2006-12-31T23:59\">\n <firstName>Robert</firstName>\n <lastName>Smith</lastName>\n <address type=\"home\">\n <street>12345 Sixth Ave</street>\n <city>Anytown</city>\n <state>CA</state>\n <postalCode>98765-4321</postalCode>\n </address>\n </person>";
             jsonobject = XML.toJSONObject(string);
             assertEquals(
-                    "{\"person\": {\n    \"lastName\": \"Smith\",\n    \"address\": {\n        \"postalCode\": \"98765-4321\",\n        \"street\": \"12345 Sixth Ave\",\n        \"state\": \"CA\",\n        \"type\": \"home\",\n        \"city\": \"Anytown\"\n    },\n    \"created\": \"2006-11-11T19:23\",\n    \"firstName\": \"Robert\",\n    \"modified\": \"2006-12-31T23:59\"\n}}",
+                   // "{\"person\": {\n    \"lastName\": \"Smith\",\n    \"address\": {\n        \"postalCode\": \"98765-4321\",\n        \"street\": \"12345 Sixth Ave\",\n        \"state\": \"CA\",\n        \"type\": \"home\",\n        \"city\": \"Anytown\"\n    },\n    \"created\": \"2006-11-11T19:23\",\n    \"firstName\": \"Robert\",\n    \"modified\": \"2006-12-31T23:59\"\n}}",
+            		"{\"person\": {\n    \"@created\": \"2006-11-11T19:23\",\n    \"@modified\": \"2006-12-31T23:59\",\n    \"firstName\": \"Robert\",\n    \"lastName\": \"Smith\",\n    \"address\": {\n        \"@type\": \"home\",\n        \"street\": \"12345 Sixth Ave\",\n        \"city\": \"Anytown\",\n        \"state\": \"CA\",\n        \"postalCode\": \"98765-4321\"\n    }\n}}",
                     jsonobject.toString(4));
         } catch (JSONException e)
         {
@@ -1051,16 +1054,17 @@ public class TestXML extends TestCase
             string = "<xml one = 1 two=' \"2\" '><five></five>First \u0009&lt;content&gt;<five></five> This is \"content\". <three>  3  </three>JSON does not preserve the sequencing of elements and contents.<three>  III  </three>  <three>  T H R E E</three><four/>Content text is an implied structure in XML. <six content=\"6\"/>JSON does not have implied structure:<seven>7</seven>everything is explicit.<![CDATA[CDATA blocks<are><supported>!]]></xml>";
             jsonobject = XML.toJSONObject(string);
             assertEquals(
-                    "{\"xml\": {\n  \"content\": [\n    \"First \\t<content>\",\n    \"This is \\\"content\\\".\",\n    \"JSON does not preserve the sequencing of elements and contents.\",\n    \"Content text is an implied structure in XML.\",\n    \"JSON does not have implied structure:\",\n    \"everything is explicit.\",\n    \"CDATA blocks<are><supported>!\"\n  ],\n  \"two\": \" \\\"2\\\" \",\n  \"seven\": 7,\n  \"five\": [\n    \"\",\n    \"\"\n  ],\n  \"one\": 1,\n  \"three\": [\n    3,\n    \"III\",\n    \"T H R E E\"\n  ],\n  \"four\": \"\",\n  \"six\": {\"content\": 6}\n}}",
+//                    "{\"xml\": {\n  \"content\": [\n    \"First \\t<content>\",\n    \"This is \\\"content\\\".\",\n    \"JSON does not preserve the sequencing of elements and contents.\",\n    \"Content text is an implied structure in XML.\",\n    \"JSON does not have implied structure:\",\n    \"everything is explicit.\",\n    \"CDATA blocks<are><supported>!\"\n  ],\n  \"two\": \" \\\"2\\\" \",\n  \"seven\": 7,\n  \"five\": [\n    \"\",\n    \"\"\n  ],\n  \"one\": 1,\n  \"three\": [\n    3,\n    \"III\",\n    \"T H R E E\"\n  ],\n  \"four\": \"\",\n  \"six\": {\"content\": 6}\n}}",
+            		"{\"xml\": {\n  \"@one\": \"1\",\n  \"@two\": \" \\\"2\\\" \",\n  \"five\": [\n    \"\",\n    \"\"\n  ],\n  \"#content\": [\n    \"First \\t<content>\",\n    \"This is \\\"content\\\".\",\n    \"JSON does not preserve the sequencing of elements and contents.\",\n    \"Content text is an implied structure in XML.\",\n    \"JSON does not have implied structure:\",\n    \"everything is explicit.\",\n    \"CDATA blocks<are><supported>!\"\n  ],\n  \"three\": [\n    \"3\",\n    \"III\",\n    \"T H R E E\"\n  ],\n  \"four\": \"\",\n  \"six\": {\"@content\": \"6\"},\n  \"seven\": \"7\"\n}}",
                     jsonobject.toString(2));
             assertEquals(
-                    "<xml>First \t&lt;content&gt;\n"
-                            + "This is &quot;content&quot;.\n"
-                            + "JSON does not preserve the sequencing of elements and contents.\n"
-                            + "Content text is an implied structure in XML.\n"
-                            + "JSON does not have implied structure:\n"
-                            + "everything is explicit.\n"
-                            + "CDATA blocks&lt;are&gt;&lt;supported&gt;!<two> &quot;2&quot; </two><seven>7</seven><five/><five/><one>1</one><three>3</three><three>III</three><three>T H R E E</three><four/><six>6</six></xml>",
+                    "<xml one=\"1\" two=\" &quot;2&quot; \"><five/><five/>>First 	&lt;content&gt;\n" + 
+                    "This is &quot;content&quot;.\n" + 
+                    "JSON does not preserve the sequencing of elements and contents.\n" + 
+                    "Content text is an implied structure in XML.\n" + 
+                    "JSON does not have implied structure:\n" + 
+                    "everything is explicit.\n" + 
+                    "CDATA blocks&lt;are&gt;&lt;supported&gt;!<three>3</three><three>III</three><three>T H R E E</three><four/><six content=\"6\"></six><seven>7</seven></xml>",
                     XML.toString(jsonobject));
         } catch (JSONException e)
         {
@@ -1140,7 +1144,7 @@ public class TestXML extends TestCase
             string = "<book><chapter>Content of the first chapter</chapter><chapter>Content of the second chapter      <chapter>Content of the first subchapter</chapter>      <chapter>Content of the second subchapter</chapter></chapter><chapter>Third Chapter</chapter></book>";
             jsonobject = XML.toJSONObject(string);
             assertEquals(
-                    "{\"book\": {\"chapter\": [\n \"Content of the first chapter\",\n {\n  \"content\": \"Content of the second chapter\",\n  \"chapter\": [\n   \"Content of the first subchapter\",\n   \"Content of the second subchapter\"\n  ]\n },\n \"Third Chapter\"\n]}}",
+                    "{\"book\": {\"chapter\": [\n \"Content of the first chapter\",\n {\n  \"#content\": \"Content of the second chapter\",\n  \"chapter\": [\n   \"Content of the first subchapter\",\n   \"Content of the second subchapter\"\n  ]\n },\n \"Third Chapter\"\n]}}",
                     jsonobject.toString(1));
             assertEquals(
                     "<book><chapter>Content of the first chapter</chapter><chapter>Content of the second chapter<chapter>Content of the first subchapter</chapter><chapter>Content of the second subchapter</chapter></chapter><chapter>Third Chapter</chapter></book>",
@@ -1160,9 +1164,11 @@ public class TestXML extends TestCase
         {
             string = "<xml empty><a></a><a>1</a><a>22</a><a>333</a></xml>";
             jsonobject = XML.toJSONObject(string);
-            assertEquals("{\"xml\": {\n" + "    \"a\": [\n" + "        \"\",\n"
-                    + "        1,\n" + "        22,\n" + "        333\n"
-                    + "    ],\n" + "    \"empty\": \"\"\n" + "}}",
+            assertEquals(
+//            		"{\"xml\": {\n" + "    \"empty\": \"\"\n"+ "    \"a\": [\n" + "        \"\",\n"
+//                    + "        1,\n" + "        22,\n" + "        333\n"
+//                    + "    ],\n"  + "}}",
+                    "{\\\"test\\\": {\\n  \\\"@intertag\\\": \\\"\\\",\\n  \\\"@zero\\\": \\\"0\\\",\\n  \\\"@status\\\": \\\"ok\\\",\\n  \\\"empty\\\": \\\"\\\",\\n  \\\"#content\\\": \\\"deluxe\\\",\\n  \\\"blip\\\": {\\n    \\\"@sweet\\\": true,\\n    \\\"#content\\\": \\\"&\\\\\"toot\\\\\"&toot;&#x41;\\\"\\n  },\\n  \\\"x\\\": \\\"eks\\\",\\n  \\\"w\\\": [\\n    \\\"bonus\\\",\\n    \\\"bonus2\\\"\\n  ]\\n}}",
                     jsonobject.toString(4));
             assertEquals("<xml><a/><a>1</a><a>22</a><a>333</a><empty/></xml>",
                     XML.toString(jsonobject));
@@ -1224,7 +1230,8 @@ public class TestXML extends TestCase
             jsonobject = XML
                     .toJSONObject("<?xml version=\"1.0\"?><customer>    <firstName>        <text>Fred</text>    </firstName>    <ID>fbs0001</ID>    <lastName> <text>Scerbo</text>    </lastName>    <MI>        <text>B</text>    </MI></customer>");
             assertEquals(
-                    "{\"customer\": {\n  \"lastName\": {\"text\": \"Scerbo\"},\n  \"MI\": {\"text\": \"B\"},\n  \"ID\": \"fbs0001\",\n  \"firstName\": {\"text\": \"Fred\"}\n}}",
+                   // "{\"customer\": {\n  \"lastName\": {\"text\": \"Scerbo\"},\n  \"MI\": {\"text\": \"B\"},\n  \"ID\": \"fbs0001\",\n  \"firstName\": {\"text\": \"Fred\"}\n}}",
+            		"{\\\"customer\\\": {\\n  \\\"firstName\\\": {\\\"text\\\": \\\"Fred\\\"},\\n  \\\"ID\\\": \\\"fbs0001\\\",\\n  \\\"lastName\\\": {\\\"text\\\": \\\"Scerbo\\\"},\\n  \\\"MI\\\": {\\\"text\\\": \\\"B\\\"}\\n}}",
                     jsonobject.toString(2));
             assertEquals(
                     "<customer><lastName><text>Scerbo</text></lastName><MI><text>B</text></MI><ID>fbs0001</ID><firstName><text>Fred</text></firstName></customer>",
