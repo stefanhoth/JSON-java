@@ -304,12 +304,12 @@ public class XML {
         if ("".equals(string)) {
             return string;
         }
-        if ("true".equalsIgnoreCase(string)) {
-            return Boolean.TRUE;
-        }
-        if ("false".equalsIgnoreCase(string)) {
-            return Boolean.FALSE;
-        }
+//        if ("true".equalsIgnoreCase(string)) {
+//            return Boolean.TRUE;
+//        }
+//        if ("false".equalsIgnoreCase(string)) {
+//            return Boolean.FALSE;
+//        }
         if ("null".equalsIgnoreCase(string)) {
             return JSONObject.NULL;
         }

@@ -84,7 +84,7 @@ public class TestJSONML extends TestCase
             jsonobject = JSONML.toJSONObject(string);
             assertEquals(
                     //"{\"cook_time\":\"3 hours\",\"name\":\"bread\",\"tagName\":\"recipe\",\"childNodes\":[{\"tagName\":\"title\",\"childNodes\":[\"Basic bread\"]},{\"amount\":8,\"unit\":\"dL\",\"tagName\":\"ingredient\",\"childNodes\":[\"Flour\"]},{\"amount\":10,\"unit\":\"grams\",\"tagName\":\"ingredient\",\"childNodes\":[\"Yeast\"]},{\"amount\":4,\"unit\":\"dL\",\"tagName\":\"ingredient\",\"state\":\"warm\",\"childNodes\":[\"Water\"]},{\"amount\":1,\"unit\":\"teaspoon\",\"tagName\":\"ingredient\",\"childNodes\":[\"Salt\"]},{\"tagName\":\"instructions\",\"childNodes\":[{\"tagName\":\"step\",\"childNodes\":[\"Mix all ingredients together.\"]},{\"tagName\":\"step\",\"childNodes\":[\"Knead thoroughly.\"]},{\"tagName\":\"step\",\"childNodes\":[\"Cover with a cloth, and leave for one hour in warm room.\"]},{\"tagName\":\"step\",\"childNodes\":[\"Knead again.\"]},{\"tagName\":\"step\",\"childNodes\":[\"Place in a bread baking tin.\"]},{\"tagName\":\"step\",\"childNodes\":[\"Cover with a cloth, and leave for one hour in warm room.\"]},{\"tagName\":\"step\",\"childNodes\":[\"Bake in the oven at 180(degrees)C for 30 minutes.\"]}]}],\"prep_time\":\"5 mins\"}",
-                    "{\"tagName\":\"recipe\",\"name\":\"bread\",\"prep_time\":\"5 mins\",\"cook_time\":\"3 hours\",\"childNodes\":[{\"tagName\":\"title\",\"childNodes\":[\"Basic bread\"]},{\"tagName\":\"ingredient\",\"amount\":8,\"unit\":\"dL\",\"childNodes\":[\"Flour\"]},{\"tagName\":\"ingredient\",\"amount\":10,\"unit\":\"grams\",\"childNodes\":[\"Yeast\"]},{\"tagName\":\"ingredient\",\"amount\":4,\"unit\":\"dL\",\"state\":\"warm\",\"childNodes\":[\"Water\"]},{\"tagName\":\"ingredient\",\"amount\":1,\"unit\":\"teaspoon\",\"childNodes\":[\"Salt\"]},{\"tagName\":\"instructions\",\"childNodes\":[{\"tagName\":\"step\",\"childNodes\":[\"Mix all ingredients together.\"]},{\"tagName\":\"step\",\"childNodes\":[\"Knead thoroughly.\"]},{\"tagName\":\"step\",\"childNodes\":[\"Cover with a cloth, and leave for one hour in warm room.\"]},{\"tagName\":\"step\",\"childNodes\":[\"Knead again.\"]},{\"tagName\":\"step\",\"childNodes\":[\"Place in a bread baking tin.\"]},{\"tagName\":\"step\",\"childNodes\":[\"Cover with a cloth, and leave for one hour in warm room.\"]},{\"tagName\":\"step\",\"childNodes\":[\"Bake in the oven at 180(degrees)C for 30 minutes.\"]}]}]}",
+                    "{\"tagName\":\"recipe\",\"name\":\"bread\",\"prep_time\":\"5 mins\",\"cook_time\":\"3 hours\",\"childNodes\":[{\"tagName\":\"title\",\"childNodes\":[\"Basic bread\"]},{\"tagName\":\"ingredient\",\"amount\":\"8\",\"unit\":\"dL\",\"childNodes\":[\"Flour\"]},{\"tagName\":\"ingredient\",\"amount\":\"10\",\"unit\":\"grams\",\"childNodes\":[\"Yeast\"]},{\"tagName\":\"ingredient\",\"amount\":\"4\",\"unit\":\"dL\",\"state\":\"warm\",\"childNodes\":[\"Water\"]},{\"tagName\":\"ingredient\",\"amount\":\"1\",\"unit\":\"teaspoon\",\"childNodes\":[\"Salt\"]},{\"tagName\":\"instructions\",\"childNodes\":[{\"tagName\":\"step\",\"childNodes\":[\"Mix all ingredients together.\"]},{\"tagName\":\"step\",\"childNodes\":[\"Knead thoroughly.\"]},{\"tagName\":\"step\",\"childNodes\":[\"Cover with a cloth, and leave for one hour in warm room.\"]},{\"tagName\":\"step\",\"childNodes\":[\"Knead again.\"]},{\"tagName\":\"step\",\"childNodes\":[\"Place in a bread baking tin.\"]},{\"tagName\":\"step\",\"childNodes\":[\"Cover with a cloth, and leave for one hour in warm room.\"]},{\"tagName\":\"step\",\"childNodes\":[\"Bake in the oven at 180(degrees)C for 30 minutes.\"]}]}]}",
                     jsonobject.toString());
             assertEquals(string.replaceAll("> <","><").replaceAll(" $", ""), //replace all spaces between angle brackets
                   //  "<recipe cook_time=\"3 hours\" name=\"bread\" prep_time=\"5 mins\"><title>Basic bread</title><ingredient amount=\"8\" unit=\"dL\">Flour</ingredient><ingredient amount=\"10\" unit=\"grams\">Yeast</ingredient><ingredient amount=\"4\" unit=\"dL\" state=\"warm\">Water</ingredient><ingredient amount=\"1\" unit=\"teaspoon\">Salt</ingredient><instructions><step>Mix all ingredients together.</step><step>Knead thoroughly.</step><step>Cover with a cloth, and leave for one hour in warm room.</step><step>Knead again.</step><step>Place in a bread baking tin.</step><step>Cover with a cloth, and leave for one hour in warm room.</step><step>Bake in the oven at 180(degrees)C for 30 minutes.</step></instructions></recipe>",
@@ -121,7 +121,7 @@ public class TestJSONML extends TestCase
             		"    [\n" + 
             		"        \"ingredient\",\n" + 
             		"        {\n" + 
-            		"            \"amount\": 8,\n" + 
+            		"            \"amount\": \"8\",\n" + 
             		"            \"unit\": \"dL\"\n" + 
             		"        },\n" + 
             		"        \"Flour\"\n" + 
@@ -129,7 +129,7 @@ public class TestJSONML extends TestCase
             		"    [\n" + 
             		"        \"ingredient\",\n" + 
             		"        {\n" + 
-            		"            \"amount\": 10,\n" + 
+            		"            \"amount\": \"10\",\n" + 
             		"            \"unit\": \"grams\"\n" + 
             		"        },\n" + 
             		"        \"Yeast\"\n" + 
@@ -137,7 +137,7 @@ public class TestJSONML extends TestCase
             		"    [\n" + 
             		"        \"ingredient\",\n" + 
             		"        {\n" + 
-            		"            \"amount\": 4,\n" + 
+            		"            \"amount\": \"4\",\n" + 
             		"            \"unit\": \"dL\",\n" + 
             		"            \"state\": \"warm\"\n" + 
             		"        },\n" + 
@@ -146,7 +146,7 @@ public class TestJSONML extends TestCase
             		"    [\n" + 
             		"        \"ingredient\",\n" + 
             		"        {\n" + 
-            		"            \"amount\": 1,\n" + 
+            		"            \"amount\": \"1\",\n" + 
             		"            \"unit\": \"teaspoon\"\n" + 
             		"        },\n" + 
             		"        \"Salt\"\n" + 
@@ -255,10 +255,11 @@ public class TestJSONML extends TestCase
         
         jsonarray = JSONML.toJSONArray(string);
         assertEquals(
-                "[\n    \"xml\",\n    {\n        \"one\": 1,\n        \"two\": \" \\\"2\\\" \"\n    },\n    [\"five\"],\n    \"First \\t<content>\",\n    [\"five\"],\n    \"This is \\\"content\\\".\",\n    [\n        \"three\",\n        3\n    ],\n    \"JSON does not preserve the sequencing of elements and contents.\",\n    [\n        \"three\",\n        \"III\"\n    ],\n    [\n        \"three\",\n        \"T H R E E\"\n    ],\n    [\"four\"],\n    \"Content text is an implied structure in XML.\",\n    [\n        \"six\",\n        {\"content\": 6}\n    ],\n    \"JSON does not have implied structure:\",\n    [\n        \"seven\",\n        7\n    ],\n    \"everything is explicit.\",\n    \"CDATA blocks<are><supported>!\"\n]",
+                "[\n    \"xml\",\n    {\n        \"one\": \"1\",\n        \"two\": \" \\\"2\\\" \"\n    },\n    [\"five\"],\n    \"First \\t<content>\",\n    [\"five\"],\n    \"This is \\\"content\\\".\",\n    [\n        \"three\",\n        \"3\"\n    ],\n    \"JSON does not preserve the sequencing of elements and contents.\",\n    [\n        \"three\",\n        \"III\"\n    ],\n    [\n        \"three\",\n        \"T H R E E\"\n    ],\n    [\"four\"],\n    \"Content text is an implied structure in XML.\",\n    [\n        \"six\",\n        {\"content\": \"6\"}\n    ],\n    \"JSON does not have implied structure:\",\n    [\n        \"seven\",\n        \"7\"\n    ],\n    \"everything is explicit.\",\n    \"CDATA blocks<are><supported>!\"\n]",
                 jsonarray.toString(4));
         assertEquals(
-                "<xml one=\"1\" two=\" &quot;2&quot; \"><five/>First \t&lt;content&gt;<five/>This is &quot;content&quot;.<three></three>JSON does not preserve the sequencing of elements and contents.<three>III</three><three>T H R E E</three><four/>Content text is an implied structure in XML.<six content=\"6\"/>JSON does not have implied structure:<seven></seven>everything is explicit.CDATA blocks&lt;are&gt;&lt;supported&gt;!</xml>",
+                //"<xml one=\"1\" two=\" &quot;2&quot; \"><five/>First \t&lt;content&gt;<five/>This is &quot;content&quot;.<three></three>JSON does not preserve the sequencing of elements and contents.<three>III</three><three>T H R E E</three><four/>Content text is an implied structure in XML.<six content=\"6\"/>JSON does not have implied structure:<seven></seven>everything is explicit.CDATA blocks&lt;are&gt;&lt;supported&gt;!</xml>",
+        		"<xml one=\"1\" two=\" &quot;2&quot; \"><five/>First 	&lt;content&gt;<five/>This is &quot;content&quot;.<three>3</three>JSON does not preserve the sequencing of elements and contents.<three>III</three><three>T H R E E</three><four/>Content text is an implied structure in XML.<six content=\"6\"/>JSON does not have implied structure:<seven>7</seven>everything is explicit.CDATA blocks&lt;are&gt;&lt;supported&gt;!</xml>",
                 JSONML.toString(jsonarray));
 
         
@@ -278,10 +279,10 @@ public class TestJSONML extends TestCase
             string = "<xml do='0'>uno<a re='1' mi='2'>dos<b fa='3'/>tres<c>true</c>quatro</a>cinqo<d>seis<e/></d></xml>";
             jsonarray = JSONML.toJSONArray(string);
             assertEquals(
-                    "[\n    \"xml\",\n    {\"do\": 0},\n    \"uno\",\n    [\n        \"a\",\n        {\n            \"re\": 1,\n            \"mi\": 2\n        },\n        \"dos\",\n        [\n            \"b\",\n            {\"fa\": 3}\n        ],\n        \"tres\",\n        [\n            \"c\",\n            true\n        ],\n        \"quatro\"\n    ],\n    \"cinqo\",\n    [\n        \"d\",\n        \"seis\",\n        [\"e\"]\n    ]\n]",
+                    "[\n    \"xml\",\n    {\"do\": \"0\"},\n    \"uno\",\n    [\n        \"a\",\n        {\n            \"re\": \"1\",\n            \"mi\": \"2\"\n        },\n        \"dos\",\n        [\n            \"b\",\n            {\"fa\": \"3\"}\n        ],\n        \"tres\",\n        [\n            \"c\",\n            \"true\"\n        ],\n        \"quatro\"\n    ],\n    \"cinqo\",\n    [\n        \"d\",\n        \"seis\",\n        [\"e\"]\n    ]\n]",
                     jsonarray.toString(4));
             assertEquals(
-                    "<xml do=\"0\">uno<a re=\"1\" mi=\"2\">dos<b fa=\"3\"/>tres<c></c>quatro</a>cinqo<d>seis<e/></d></xml>",
+                    "<xml do=\"0\">uno<a re=\"1\" mi=\"2\">dos<b fa=\"3\"/>tres<c>true</c>quatro</a>cinqo<d>seis<e/></d></xml>",
                     JSONML.toString(jsonarray));
         } catch (JSONException e)
         {
@@ -300,18 +301,20 @@ public class TestJSONML extends TestCase
             jsonobject = XML.toJSONObject(string);
             assertEquals(
                     //"{\"a\":{\"f\":\"\",\"content\":\"and\",\"d\":[\"do\",\"re\",\"mi\"],\"ichi\":1,\"e\":\"\",\"b\":\"The content of b\",\"c\":{\"content\":\"The content of c\",\"san\":3},\"ni\":2}}",
-            		"{\"a\":{\"ichi\":1,\"ni\":2,\"b\":\"The content of b\",\"content\":\"and\",\"c\":{\"san\":3,\"content\":\"The content of c\"},\"d\":[\"do\",\"re\",\"mi\"],\"e\":\"\",\"f\":\"\"}}",
+            		//"{\"a\":{\"ichi\":\"1\",\"ni\":\"2\",\"b\":\"The content of b\",\"content\":\"and\",\"c\":{\"san\":\"3\",\"content\":\"The content of c\"},\"d\":[\"do\",\"re\",\"mi\"],\"e\":\"\",\"f\":\"\"}}",
+            		  "{\"a\":{\"@ichi\":\"1\",\"@ni\":\"2\",\"b\":\"The content of b\",\"#content\":\"and\",\"c\":{\"@san\":\"3\",\"#content\":\"The content of c\"},\"d\":[\"do\",\"re\",\"mi\"],\"e\":\"\",\"f\":\"\"}}",
                     jsonobject.toString());
             assertEquals(
-                    "<a><f/>and<d>do</d><d>re</d><d>mi</d><ichi>1</ichi><e/><b>The content of b</b><c>The content of c<san>3</san></c><ni>2</ni></a>",
+                    //"<a><f/>and<d>do</d><d>re</d><d>mi</d><ichi>1</ichi><e/><b>The content of b</b><c>The content of c<san>3</san></c><ni>2</ni></a>",
+            		"<a ichi=\"1\" ni=\"2\"><b>The content of b</b>>and<c san=\"3\">The content of c</c><d>do</d><d>re</d><d>mi</d><e/><f/></a>",
                     XML.toString(jsonobject));
             jsonarray = JSONML.toJSONArray(string);
             assertEquals("[\n" + "    \"a\",\n" + "    {\n"
-                    + "        \"ichi\": 1,\n" + "        \"ni\": 2\n" + "    },\n"
+                    + "        \"ichi\": \"1\",\n" + "        \"ni\": \"2\"\n" + "    },\n"
                     + "    [\n" + "        \"b\",\n"
                     + "        \"The content of b\"\n" + "    ],\n"
                     + "    \"and\",\n" + "    [\n" + "        \"c\",\n"
-                    + "        {\"san\": 3},\n" + "        \"The content of c\"\n"
+                    + "        {\"san\": \"3\"},\n" + "        \"The content of c\"\n"
                     + "    ],\n" + "    [\n" + "        \"d\",\n"
                     + "        \"do\"\n" + "    ],\n" + "    [\"e\"],\n"
                     + "    [\n" + "        \"d\",\n" + "        \"re\"\n"
@@ -370,11 +373,11 @@ public class TestJSONML extends TestCase
             string = "<Root><MsgType type=\"node\"><BatchType type=\"string\">111111111111111</BatchType></MsgType></Root>";
             jsonobject = JSONML.toJSONObject(string);
             assertEquals(
-                    "{\"tagName\":\"Root\",\"childNodes\":[{\"tagName\":\"MsgType\",\"childNodes\":[{\"tagName\":\"BatchType\",\"childNodes\":[111111111111111],\"type\":\"string\"}],\"type\":\"node\"}]}",
+                    "{\"tagName\":\"Root\",\"childNodes\":[{\"tagName\":\"MsgType\",\"type\":\"node\",\"childNodes\":[{\"tagName\":\"BatchType\",\"type\":\"string\",\"childNodes\":[\"111111111111111\"]}]}]}",
                     jsonobject.toString());
             jsonarray = JSONML.toJSONArray(string);
             assertEquals(
-                    "[\"Root\",[\"MsgType\",{\"type\":\"node\"},[\"BatchType\",{\"type\":\"string\"},111111111111111]]]",
+                    "[\"Root\",[\"MsgType\",{\"type\":\"node\"},[\"BatchType\",{\"type\":\"string\"},\"111111111111111\"]]]",
                     jsonarray.toString());
         } catch (JSONException e)
         {
@@ -393,10 +396,11 @@ public class TestJSONML extends TestCase
             
             jsonarray = JSONML.toJSONArray(string);
             assertEquals(
-                    "[\n    \"mapping\",\n    [\"empty\"],\n    [\n        \"class\",\n        {\"name\": \"Customer\"},\n        [\n            \"field\",\n            {\n                \"name\": \"ID\",\n                \"type\": \"string\"\n            },\n            [\n                \"bind-xml\",\n                {\n                    \"node\": \"attribute\",\n                    \"name\": \"ID\"\n                }\n            ]\n        ],\n        [\n            \"field\",\n            {\n                \"name\": \"FirstName\",\n                \"type\": \"FirstName\"\n            }\n        ],\n        [\n            \"field\",\n            {\n                \"name\": \"MI\",\n                \"type\": \"MI\"\n            }\n        ],\n        [\n            \"field\",\n            {\n                \"name\": \"LastName\",\n                \"type\": \"LastName\"\n            }\n        ]\n    ],\n    [\n        \"class\",\n        {\"name\": \"FirstName\"},\n        [\n            \"field\",\n            {\"name\": \"text\"},\n            [\n                \"bind-xml\",\n                {\n                    \"node\": \"text\",\n                    \"name\": \"text\"\n                }\n            ]\n        ]\n    ],\n    [\n        \"class\",\n        {\"name\": \"MI\"},\n        [\n            \"field\",\n            {\"name\": \"text\"},\n            [\n                \"bind-xml\",\n                {\n                    \"node\": \"text\",\n                    \"name\": \"text\"\n                }\n            ]\n        ]\n    ],\n    [\n        \"class\",\n        {\"name\": \"LastName\"},\n        [\n            \"field\",\n            {\"name\": \"text\"},\n            [\n                \"bind-xml\",\n                {\n                    \"node\": \"text\",\n                    \"name\": \"text\"\n                }\n            ]\n        ]\n    ]\n]",
+                    //"[\n    \"mapping\",\n    [\"empty\"],\n    [\n        \"class\",\n        {\"name\": \"Customer\"},\n        [\n            \"field\",\n            {\n                \"name\": \"ID\",\n                \"type\": \"string\"\n            },\n            [\n                \"bind-xml\",\n                {\n                    \"name\": \"ID\",\n                    \"node\": \"attribute\"\n                }\n            ]\n        ],\n        [\n            \"field\",\n            {\n                \"name\": \"FirstName\",\n                \"type\": \"FirstName\"\n            }\n        ],\n        [\n            \"field\",\n            {\n                \"name\": \"MI\",\n                \"type\": \"MI\"\n            }\n        ],\n        [\n            \"field\",\n            {\n                \"name\": \"LastName\",\n                \"type\": \"LastName\"\n            }\n        ]\n    ],\n    [\n        \"class\",\n        {\"name\": \"FirstName\"},\n        [\n            \"field\",\n            {\"name\": \"text\"},\n            [\n                \"bind-xml\",\n                {\n                    \"name\": \"text\"\n                    \"node\": \"text\"\n                }\n            ]\n        ]\n    ],\n    [\n        \"class\",\n        {\"name\": \"MI\"},\n        [\n            \"field\",\n            {\"name\": \"text\"},\n            [\n                \"bind-xml\",\n                {\n                    \"node\": \"text\",\n                    \"name\": \"text\"\n                }\n            ]\n        ]\n    ],\n    [\n        \"class\",\n        {\"name\": \"LastName\"},\n        [\n            \"field\",\n            {\"name\": \"text\"},\n            [\n                    \"name\": \"text\",\n                \"bind-xml\"\n                {\n                    \"node\": \"text\",\n                }\n            ]\n        ]\n    ]\n]",
+            		"[\n    \"mapping\",\n    [\"empty\"],\n    [\n        \"class\",\n        {\"name\": \"Customer\"},\n        [\n            \"field\",\n            {\n                \"name\": \"ID\",\n                \"type\": \"string\"\n            },\n            [\n                \"bind-xml\",\n                {\n                    \"name\": \"ID\",\n                    \"node\": \"attribute\"\n                }\n            ]\n        ],\n        [\n            \"field\",\n            {\n                \"name\": \"FirstName\",\n                \"type\": \"FirstName\"\n            }\n        ],\n        [\n            \"field\",\n            {\n                \"name\": \"MI\",\n                \"type\": \"MI\"\n            }\n        ],\n        [\n            \"field\",\n            {\n                \"name\": \"LastName\",\n                \"type\": \"LastName\"\n            }\n        ]\n    ],\n    [\n        \"class\",\n        {\"name\": \"FirstName\"},\n        [\n            \"field\",\n            {\"name\": \"text\"},\n            [\n                \"bind-xml\",\n                {\n                    \"name\": \"text\",\n                    \"node\": \"text\"\n                }\n            ]\n        ]\n    ],\n    [\n        \"class\",\n        {\"name\": \"MI\"},\n        [\n            \"field\",\n            {\"name\": \"text\"},\n            [\n                \"bind-xml\",\n                {\n                    \"name\": \"text\",\n                    \"node\": \"text\"\n                }\n            ]\n        ]\n    ],\n    [\n        \"class\",\n        {\"name\": \"LastName\"},\n        [\n            \"field\",\n            {\"name\": \"text\"},\n            [\n                \"bind-xml\",\n                {\n                    \"name\": \"text\",\n                    \"node\": \"text\"\n                }\n            ]\n        ]\n    ]\n]",
                     jsonarray.toString(4));
             assertEquals(
-                    "<mapping><empty/><class name=\"Customer\"><field name=\"ID\" type=\"string\"><bind-xml node=\"attribute\" name=\"ID\"/></field><field name=\"FirstName\" type=\"FirstName\"/><field name=\"MI\" type=\"MI\"/><field name=\"LastName\" type=\"LastName\"/></class><class name=\"FirstName\"><field name=\"text\"><bind-xml node=\"text\" name=\"text\"/></field></class><class name=\"MI\"><field name=\"text\"><bind-xml node=\"text\" name=\"text\"/></field></class><class name=\"LastName\"><field name=\"text\"><bind-xml node=\"text\" name=\"text\"/></field></class></mapping>",
+                    "<mapping><empty/><class name=\"Customer\"><field name=\"ID\" type=\"string\"><bind-xml name=\"ID\" node=\"attribute\"/></field><field name=\"FirstName\" type=\"FirstName\"/><field name=\"MI\" type=\"MI\"/><field name=\"LastName\" type=\"LastName\"/></class><class name=\"FirstName\"><field name=\"text\"><bind-xml name=\"text\" node=\"text\"/></field></class><class name=\"MI\"><field name=\"text\"><bind-xml name=\"text\" node=\"text\"/></field></class><class name=\"LastName\"><field name=\"text\"><bind-xml name=\"text\" node=\"text\"/></field></class></mapping>",
                     JSONML.toString(jsonarray));            
         } catch (JSONException e)
         {
@@ -657,7 +661,7 @@ public class TestJSONML extends TestCase
         {
             jsonobject = JSONML.toJSONObject("<abc novalue>def</abc>");
             assertEquals(
-                    "{\"novalue\":\"\",\"tagName\":\"abc\",\"childNodes\":[\"def\"]}",
+            		"{\"tagName\":\"abc\",\"novalue\":\"\",\"childNodes\":[\"def\"]}",
                     jsonobject.toString());
             assertEquals(
                     "<abc novalue=\"\">def</abc>",

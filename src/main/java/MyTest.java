@@ -51,11 +51,10 @@ public class MyTest {
 		jsonarray = JSONML.toJSONArray(string);
 		System.out.println(jsonarray);*/
 		JSONObject jsonobject = new JSONObject();
-    	JSONObject localobj = new JSONObject();
-    	localobj.put("a","old");
-    	jsonobject.put("passre",localobj);
-		localobj.put("b","new");
-		System.out.println(jsonobject.toString());
+    	JSONObject localobj = new JSONObject("{\"a\":\"true\",\"b\":true,'c':20,'d':'20'}");
+//    	localobj.put("a","true");
+//		localobj.put("b",true);
+		System.out.println(localobj.toString());
 	}
 
 }
