@@ -2,7 +2,7 @@
 #Original [package org.json] Douglas Crockford
 
 The key changes are:
-##JSONObject is extended from LinkedHashMap ##
+##JSONObject is extended from LinkedHashMap
 
 * Ensures order of elements
 * Enables the normal HashMap methods to be available although most of them were overridden in earlier implementation like keys() and keySet()
@@ -14,18 +14,19 @@ The key changes are:
 > This is because in JDK 7 getDeclaredMethods() does not retrieve the methods in order it is random and can vary from time to time. A bug was logged for jdk but was rejected as wont fix. 
 > In JDK6 and lower versions the order is maintained however this is a feature not mentioned in specifications of jdk.  
 
-##JSONArray extends from ArrayList##
+##JSONArray extends from ArrayList
 * This in combination with JSONObjects extends from LinkedHashMap enables the whole library to be usable in a generic way where other libraries which uses model data in any combination of Map<String, Object> and List<Object> for example Map<String,List<Object>>.
 
 
-##XML to JSON Serialization##
+##XML to JSON Serialization
 * Attributes are marked with a '@' prepended to the key
 * Content element is marked with a '#' prepended to the key
 * Since the json keeps order of the original xml elements it can be deserialized back to same xml.
  
+#### Earlier version of JSON below refers to release version 20090211 or before.
 
 An xml of format 
-```xml
+```java
 	<root><person fname="samarjit" lname="samanta" >normal text</person></root>
 	
 	//will serialize to 
@@ -34,10 +35,10 @@ An xml of format
 	//In earlier version it used to serialize to 
 	{"root":{"person":{"fname":"samarjit","lname":"samanta","content":"normal text"}}}	
 ```
-##JSON to XML Serialization##  
+##JSON to XML Serialization 
 	
 Since we have the attribute marked in the json, we can create back the exact xml
-```xml	
+```java	
 	//This version if input json is
 	{"root":{"person":{"@fname":"samarjit","@lname":"samanta","#content":"normal text"}}}
 	
@@ -52,7 +53,7 @@ Since we have the attribute marked in the json, we can create back the exact xml
 			
 Example of libraries that uses model as combination of Map<String,Object> and List<Object> and arbitrary java beans.
 
-### Freemarker ###
+### Freemarker
 ```java
 		String templateExpression = "Hi ${ddd} hello ${ar[0]} your home is ${USER_HOME}";
 
@@ -72,16 +73,16 @@ Example of libraries that uses model as combination of Map<String,Object> and Li
 		System.out.println(ret);
 ```		
 Result	
-	
+```java	
 		//This version produces
 		Hi jsss hello jhaldia your home is C:/Users/Samarjit
 		
 		//Earlier version json: 	
 		Hi jsss hello [ your home is C:/Users/Samarjit
-
+```
 		
 		
-### Ognl ###	
+### Ognl	
 ```java	
    		JSONObject jobj1 = new JSONObject();
 		jobj1.put("ddd","jsss");
@@ -102,5 +103,5 @@ This version produces
 ```
 
 
-Please refer to the original README for other functions. 
+>  Please refer to the original README for other functions. 
   						 		
