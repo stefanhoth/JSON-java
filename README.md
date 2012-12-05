@@ -33,7 +33,7 @@ An xml of format
 		
 	//In earlier version it used to serialize to 
 	{"root":{"person":{"fname":"samarjit","lname":"samanta","content":"normal text"}}}	
-
+```
 ##JSON to XML Serialization##  
 	
 Since we have the attribute marked in the json, we can create back the exact xml
@@ -48,7 +48,7 @@ Since we have the attribute marked in the json, we can create back the exact xml
 	{"root":{"person":{"content":"normal text","lname":"samanta","fname":"samarjit"}}}
 	//produces	
 	<root><person>normal text<lname>samanta</lname><fname>samarjit</fname></person></root>
-			
+```			
 			
 Example of libraries that uses model as combination of Map<String,Object> and List<Object> and arbitrary java beans.
 
@@ -70,7 +70,7 @@ Example of libraries that uses model as combination of Map<String,Object> and Li
 		String ret = out.toString(); 
 		
 		System.out.println(ret);
-		
+```		
 Result	
 	
 		//This version produces
@@ -90,7 +90,7 @@ Result
 		System.out.println(Ognl.getValue("ar[0]", rootObject , jobj1 ));	
 		Object obj2 =  Ognl.getValue("someBean.sss",context);
 		System.out.println(obj2);
-		
+```		
 Result
 This version produces
 ```java
@@ -99,7 +99,7 @@ This version produces
 		
 		//Earlier version json		
   		ognl.NoSuchPropertyException: org.json.JSONObject.ar
-
+```
 
 
 Please refer to the original README for other functions. 
