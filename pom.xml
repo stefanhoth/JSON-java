@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.json</groupId>
 	<artifactId>json</artifactId>
-	<version>20111006</version>
+	<version>20121205</version>
 	<packaging>jar</packaging>
 	<name>json.org</name>
 	<description>A reference implementation of a JSON package in Java.</description>
@@ -14,9 +14,9 @@
 		<url>https://github.com/douglascrockford/JSON-java/issues</url>
 	</issueManagement>
 	<scm>
-		<connection>scm:git:https://github.com/stefanhoth/JSON-java.git</connection>
-		<developerConnection>scm:git:ssh://github.com/stefanhoth/JSON-java.git</developerConnection>
-		<url>https://github.com/stefanhoth/JSON-java</url>
+		<connection>scm:git:https://github.com/samarjit/JSON-java.git</connection>
+		<developerConnection>scm:git:ssh://github.com/samarjit/JSON-java.git</developerConnection>
+		<url>https://github.com/samarjit/JSON-java</url>
 	</scm>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -27,12 +27,6 @@
 			<artifactId>junit</artifactId>
 			<version>4.4</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.json-lib</groupId>
-			<artifactId>json-lib</artifactId>
-			<version>2.4</version>
-			<classifier>jdk15</classifier>
 		</dependency>
 		</dependencies>
 	<build>
