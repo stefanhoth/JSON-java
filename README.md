@@ -22,36 +22,31 @@ The key changes are:
 * Attributes are marked with a '@' prepended to the key
 * Content element is marked with a '#' prepended to the key
 * Since the json keeps order of the original xml elements it can be deserialized back to same xml.
+* Type inference is removed, every value is treated as string
  
 #### Earlier version of JSON below refers to release version 20090211 or before.
 
-An xml of format 
+XML to JSON to XML conversion
 ```java
-	<root><person fname="samarjit" lname="samanta" >normal text</person></root>
+	//This version 20121205 on wards 
+	<root><person fname="samarjit" lname="samanta" >normal text</person><version>1.0</version></root>
 	
-	//will serialize to 
-	{"root":{"person":{"@fname":"samarjit","@lname":"samanta","#content":"normal text"}}}
-		
-	//In earlier version it used to serialize to 
-	{"root":{"person":{"fname":"samarjit","lname":"samanta","content":"normal text"}}}	
-```
-##JSON to XML Serialization 
-	
-Since we have the attribute marked in the json, we can create back the exact xml
-```java	
-	//This version if input json is
-	{"root":{"person":{"@fname":"samarjit","@lname":"samanta","#content":"normal text"}}}
-	
-	//produces	
-	<root><person fname="samarjit" lname="samanta">normal text</person></root>
-	
-	//Earlier version of JSON eg. release version 20090211 or before will produce
-	{"root":{"person":{"content":"normal text","lname":"samanta","fname":"samarjit"}}}
-	//produces	
-	<root><person>normal text<lname>samanta</lname><fname>samarjit</fname></person></root>
+	//This version XML -> JSON 
+	{"root":{"person":{"@fname":"samarjit","@lname":"samanta","#content":"normal text"},"version":"1.0"}}
+	//This version JSON -> XML	
+	<root><person fname="samarjit" lname="samanta">normal text</person><version>1.0</version></root>
+
+			
+	//## Earlier version json ##
+	<root><person fname="samarjit" lname="samanta" >normal text</person><version>1.0</version></root>
+	//Earlier version XML->JSON
+	{"root":{"person":{"content":"normal text","lname":"samanta","fname":"samarjit"},"version":1}}
+  	//Earlier version JSON-> XML
+  	<root><person>normal text<lname>samanta</lname><fname>samarjit</fname></person><version>1.0</version></root>
+  	
 ```			
 			
-Example of libraries that uses model as combination of Map<String,Object> and List<Object> and arbitrary java beans.
+####Example of libraries that uses model as combination of Map<String,Object> and List<Object> and arbitrary java beans.
 
 ### Freemarker
 ```java
@@ -72,15 +67,15 @@ Example of libraries that uses model as combination of Map<String,Object> and Li
 		
 		System.out.println(ret);
 ```		
-Result	
+	
 ```java	
+	Result
 		//This version produces
 		Hi jsss hello jhaldia your home is C:/Users/Samarjit
 		
 		//Earlier version json: 	
 		Hi jsss hello [ your home is C:/Users/Samarjit
 ```
-		
 		
 ### Ognl	
 ```java	
@@ -92,9 +87,11 @@ Result
 		Object obj2 =  Ognl.getValue("someBean.sss",context);
 		System.out.println(obj2);
 ```		
-Result
-This version produces
-```java
+
+
+```java 
+	Result
+		//This version produces
 		jhaldia
 		dddd
 		
