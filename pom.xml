@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.json</groupId>
 	<artifactId>json</artifactId>
-	<version>20121205</version>
+	<version>20121208</version>
 	<packaging>jar</packaging>
 	<name>json.org</name>
 	<description>A reference implementation of a JSON package in Java.</description>

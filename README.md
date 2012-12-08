@@ -1,6 +1,13 @@
 #This JSON library for java, is a fork from 
 #Original [package org.json] Douglas Crockford
 
+##Version 20121208
+I finally made these changes, no reason for not having done before.
+* JSONObject implements Map
+* JSONArray implements List
+* Added separate tests for Ognl and Freemarker. Yet to include them in regression test. 
+
+##Version 20121205
 The key changes are:
 ##JSONObject is extended from LinkedHashMap
 
@@ -52,20 +59,21 @@ XML to JSON to XML conversion
 ```java
 		String templateExpression = "Hi ${ddd} hello ${ar[0]} your home is ${USER_HOME}";
 
-		Template t = new Template("name", new StringReader(templateExpression), new Configuration());
-		StringWriter out = new StringWriter();
-		
-		JSONObject jobj1 = new JSONObject();
-		jobj1.put("ddd","jsss");
-		JSONArray ar =  new JSONArray("['jhaldia','jdob']");
-		jobj1.put("ar", ar);
-		jobj1.put("USER_HOME", System.getProperty("user.home").replace("\\","/"));
-			
-		t.process(jobj1, out );
-		
-		String ret = out.toString(); 
-		
-		System.out.println(ret);
+        Template t = new Template("name", new StringReader(templateExpression), new Configuration());
+        StringWriter out = new StringWriter();
+
+        JSONObject jobj1 = new JSONObject();
+        jobj1.put("ddd","jsss");
+        JSONArray ar =  new JSONArray("['jhaldia','jdob']");
+        jobj1.put("ar", ar);
+        jobj1.put("USER_HOME", System.getProperty("user.home").replace("\\","/"));
+
+        t.process(jobj1, out );
+
+        String ret = out.toString(); 
+
+        System.out.println(ret);
+        assertEquals("Hi jsss hello jhaldia your home is "+System.getProperty("user.home").replace("\\","/"),ret);
 ```		
 	
 ```java	
@@ -79,13 +87,18 @@ XML to JSON to XML conversion
 		
 ### Ognl	
 ```java	
-   		JSONObject jobj1 = new JSONObject();
-		jobj1.put("ddd","jsss");
-		JSONArray ar =  new JSONArray("['jhaldia','jdob']");
-		jobj1.put("ar", ar);
-		System.out.println(Ognl.getValue("ar[0]", rootObject , jobj1 ));	
-		Object obj2 =  Ognl.getValue("someBean.sss",context);
-		System.out.println(obj2);
+   		Map rootObject = new HashMap();
+		Map context = new HashMap();
+		JSONObject jobj1 = new JSONObject();
+        jobj1.put("ddd","jsss");
+        JSONArray ar =  new JSONArray("['jhaldia','jdob']");
+        jobj1.put("ar", ar);
+        context.put("someBean", jobj1);
+        System.out.println(Ognl.getValue("ar[0]", rootObject , jobj1 ));    
+        assertEquals("jhaldia",Ognl.getValue("ar[0]", rootObject , jobj1 ));
+        Object obj2 =  Ognl.getValue("someBean.ddd",context);
+        System.out.println(obj2);
+        assertEquals("jsss", obj2);
 ```		
 
 
