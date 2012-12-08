@@ -31,11 +31,11 @@ import java.util.Iterator;
  * This provides static methods to convert an XML text into a JSONObject,
  * and to covert a JSONObject into an XML text.
  * @author JSON.org
- * @version 2011-02-11
+ * @version 2012-10-26
  */
 public class XML {
 
-    /** The Character '&'. */
+    /** The Character '&amp;'. */
     public static final Character AMP   = new Character('&');
 
     /** The Character '''. */
@@ -50,7 +50,7 @@ public class XML {
     /** The Character '>'. */
     public static final Character GT    = new Character('>');
 
-    /** The Character '<'. */
+    /** The Character '&lt;'. */
     public static final Character LT    = new Character('<');
 
     /** The Character '?'. */
@@ -164,7 +164,7 @@ public class XML {
                     if (x.next() == '[') {
                         string = x.nextCDATA();
                         if (string.length() > 0) {
-                            context.accumulate("content", string);
+                            context.accumulate("#content", string);
                         }
                         return false;
                     }
@@ -229,11 +229,11 @@ public class XML {
                         if (!(token instanceof String)) {
                             throw x.syntaxError("Missing value");
                         }
-                        jsonobject.accumulate(string, 
+                        jsonobject.accumulate('@'+string,
                                 XML.stringToValue((String)token));
                         token = null;
                     } else {
-                        jsonobject.accumulate(string, "");
+                        jsonobject.accumulate('@'+string, "");
                     }
 
 // Empty tag <.../>
@@ -262,7 +262,7 @@ public class XML {
                         } else if (token instanceof String) {
                             string = (String)token;
                             if (string.length() > 0) {
-                                jsonobject.accumulate("content", 
+                                jsonobject.accumulate("#content",
                                         XML.stringToValue(string));
                             }
 
@@ -273,9 +273,9 @@ public class XML {
                                 if (jsonobject.length() == 0) {
                                     context.accumulate(tagName, "");
                                 } else if (jsonobject.length() == 1 &&
-                                       jsonobject.opt("content") != null) {
+                                       jsonobject.opt("#content") != null) {
                                     context.accumulate(tagName, 
-                                            jsonobject.opt("content"));
+                                            jsonobject.opt("#content"));
                                 } else {
                                     context.accumulate(tagName, jsonobject);
                                 }
@@ -304,46 +304,46 @@ public class XML {
         if ("".equals(string)) {
             return string;
         }
-        if ("true".equalsIgnoreCase(string)) {
-            return Boolean.TRUE;
-        }
-        if ("false".equalsIgnoreCase(string)) {
-            return Boolean.FALSE;
-        }
+//        if ("true".equalsIgnoreCase(string)) {
+//            return Boolean.TRUE;
+//        }
+//        if ("false".equalsIgnoreCase(string)) {
+//            return Boolean.FALSE;
+//        }
         if ("null".equalsIgnoreCase(string)) {
             return JSONObject.NULL;
         }
-        if ("0".equals(string)) {
-            return new Integer(0);
-        }
-
-// If it might be a number, try converting it. If that doesn't work, 
-// return the string.
-
-        try {
-            char initial = string.charAt(0);
-            boolean negative = false;
-            if (initial == '-') {
-                initial = string.charAt(1);
-                negative = true;
-            }
-            if (initial == '0' && string.charAt(negative ? 2 : 1) == '0') {
-                return string;
-            }
-            if ((initial >= '0' && initial <= '9')) {
-                if (string.indexOf('.') >= 0) {
-                    return Double.valueOf(string);
-                } else if (string.indexOf('e') < 0 && string.indexOf('E') < 0) {
-                    Long myLong = new Long(string);
-                    if (myLong.longValue() == myLong.intValue()) {
-                        return new Integer(myLong.intValue());
-                    } else {
-                        return myLong;
-                    }
-                }
-            }
-        }  catch (Exception ignore) {
-        }
+//        if ("0".equals(string)) {
+//            return new Integer(0);
+//        }
+//
+//// If it might be a number, try converting it. If that doesn't work,
+//// return the string.
+//
+//        try {
+//            char initial = string.charAt(0);
+//            boolean negative = false;
+//            if (initial == '-') {
+//                initial = string.charAt(1);
+//                negative = true;
+//            }
+//            if (initial == '0' && string.charAt(negative ? 2 : 1) == '0') {
+//                return string;
+//            }
+//            if ((initial >= '0' && initial <= '9')) {
+//                if (string.indexOf('.') >= 0) {
+//                    return Double.valueOf(string);
+//                } else if (string.indexOf('e') < 0 && string.indexOf('E') < 0) {
+//                    Long myLong = new Long(string);
+//                    if (myLong.longValue() == myLong.intValue()) {
+//                        return new Integer(myLong.intValue());
+//                    } else {
+//                        return myLong;
+//                    }
+//                }
+//            }
+//        }  catch (Exception ignore) {
+//        }
         return string;
     }
 
@@ -401,6 +401,8 @@ public class XML {
         int          length;
         String       string;
         Object       value;
+        boolean isClosedTag = false;
+        
         if (object instanceof JSONObject) {
 
 // Emit <tagName>
@@ -408,7 +410,7 @@ public class XML {
             if (tagName != null) {
                 sb.append('<');
                 sb.append(tagName);
-                sb.append('>');
+//                sb.append('>');
             }
 
 // Loop thru the keys.
@@ -427,9 +429,18 @@ public class XML {
                     string = null;
                 }
 
+//Emit @attributes samarjit
+                if (key.charAt(0) == '@') {
+                	sb.append(" "+key.substring(1));
+                	sb.append("=\"");
+                	sb.append(escape(value.toString()));
+                	sb.append("\"");
+                }else
 // Emit content in body
 
-                if ("content".equals(key)) {
+                if ("#content".equals(key)) {
+                	isClosedTag = true;
+                	sb.append(">");
                     if (value instanceof JSONArray) {
                         ja = (JSONArray)value;
                         length = ja.length();
@@ -446,6 +457,11 @@ public class XML {
 // Emit an array of similar keys
 
                 } else if (value instanceof JSONArray) {
+                	if(!isClosedTag && tagName != null){
+                		sb.append(">");
+                		isClosedTag = true;
+                	}
+                	
                     ja = (JSONArray)value;
                     length = ja.length();
                     for (i = 0; i < length; i += 1) {
@@ -463,6 +479,10 @@ public class XML {
                         }
                     }
                 } else if ("".equals(value)) {
+                	if(!isClosedTag ){
+                		sb.append(">");
+                		isClosedTag = true;
+                	}
                     sb.append('<');
                     sb.append(key);
                     sb.append("/>");
@@ -470,12 +490,20 @@ public class XML {
 // Emit a new tag <k>
 
                 } else {
+                	if(!isClosedTag && tagName != null){
+                		sb.append(">");
+                		isClosedTag = true;
+                	}
                     sb.append(toString(value, key));
                 }
             }
             if (tagName != null) {
 
 // Emit the </tagname> close tag
+            	if(!isClosedTag ){
+            		sb.append(">");
+            		isClosedTag = true;
+            	}
 
                 sb.append("</");
                 sb.append(tagName);

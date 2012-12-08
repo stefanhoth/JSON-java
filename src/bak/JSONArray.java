@@ -30,7 +30,6 @@ import java.io.Writer;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -151,14 +150,15 @@ public class JSONArray extends ArrayList{
      * @param collection     A Collection.
      */
     public JSONArray(Collection collection) {
-        super();
-//    	this.myArrayList = new ArrayList();
-        if (collection != null) {
-            Iterator iter = collection.iterator();
-            while (iter.hasNext()) {
-                super.add(JSONObject.wrap(iter.next()));
-            }
-        }
+        super((collection == null)?new ArrayList():collection);
+//    	if(collection == null)collection = new ArrayList();
+////    	this.myArrayList = new ArrayList();
+//        if (collection != null) {
+//            Iterator iter = collection.iterator();
+//            while (iter.hasNext()) {
+//                super.add(JSONObject.wrap(iter.next()));
+//            }
+//        }
     }
 
 
@@ -585,6 +585,18 @@ public class JSONArray extends ArrayList{
         super.add(new JSONArray(value));
         return this;
     }
+    
+    /**
+     * Put a value in the JSONArray, where the value will be a
+     * JSONArray which is produced from a Collection.
+     * Do not wrap JSONArray, pass by ref
+     * @param value A Collection value.
+     * @return      this.
+     */
+    public JSONArray put(JSONArray value) {
+    	super.add(value);
+    	return this;
+    }
 
 
     /**
@@ -633,15 +645,30 @@ public class JSONArray extends ArrayList{
      * @return      this.
      */
     public JSONArray put(Map value) {
+    	if(value == null )value = new JSONObject();
         super.add(new JSONObject(value));
         return this;
+    }
+    
+    /**
+     * samarjit for jsonobject same ref rather than a copy, in earlier
+     * version this jsonarray.put usually went to jsonarray.put(Object)
+     * Put a value in the JSONArray, where the value will be a
+     * JSONObject which is produced from a Map.
+     * @param value A Map value.
+     * @return      this.
+     */
+    public JSONArray put(JSONObject value) {
+    	if(value == null )value = new JSONObject();
+    	super.add(value);
+    	return this;
     }
 
 
     /**
      * Append an object value. This increases the array's length by one.
      * @param value An object value.  The value should be a
-     *  Boolean, Double, Integer, JSONArray, JSONObject, Long, or String, or the
+     *  Boolean, Double, Integer, JSONArray,<strike> JSONObject,</strike> Long, or String, or the
      *  JSONObject.NULL object.
      * @return this.
      */
@@ -682,7 +709,7 @@ public class JSONArray extends ArrayList{
             throw new JSONException("JSONArray[" + index + "] not found.");
         }
         if (index < this.length()) {
-            super.set(index, value);
+            super.set(index, new JSONArray(value));
         } else {
             while (index != this.length()) {
                 this.put(JSONObject.NULL);
@@ -754,7 +781,7 @@ public class JSONArray extends ArrayList{
              throw new JSONException("JSONArray[" + index + "] not found.");
          }
          if (index < this.length()) {
-             super.set(index, value);
+             super.set(index, new JSONObject(value));
          } else {
              while (index != this.length()) {
                  this.put(JSONObject.NULL);

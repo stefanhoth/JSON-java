@@ -32,6 +32,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Locale;
@@ -91,9 +92,21 @@ import java.util.Set;
  * </ul>
  *
  * @author JSON.org
- * @version 2012-10-27
+ * @version 2012-12-01
  */
-public class JSONObject extends LinkedHashMap{
+public class JSONObject implements Map {
+    /**
+     * The maximum number of keys in the key pool.
+     */
+     private static final int keyPoolSize = 100;
+
+   /**
+     * Key pooling is like string interning, but without permanently tying up
+     * memory. To help conserve memory, storage of duplicated key strings in
+     * JSONObjects will be avoided by using a key pool to manage unique key
+     * string objects. This is used by JSONObject.put(string, object).
+     */
+     private static HashMap keyPool = new HashMap(keyPoolSize);
 
     /**
      * JSONObject.NULL is equivalent to the value that JavaScript calls null,
@@ -134,7 +147,7 @@ public class JSONObject extends LinkedHashMap{
     /**
      * The map where the JSONObject's properties are kept.
      */
-//    private final Map map;
+    private final Map map;
 
 
     /**
@@ -150,8 +163,7 @@ public class JSONObject extends LinkedHashMap{
      * Construct an empty JSONObject.
      */
     public JSONObject() {
-    	super();
-    	// this.map = new LinkedHashMap();
+        this.map = new LinkedHashMap();
     }
 
 
@@ -240,32 +252,21 @@ public class JSONObject extends LinkedHashMap{
      * @throws JSONException
      */
     public JSONObject(Map map) {
-//       super(map == null? new JSONObject():map ); //dont it needs to be wrapped
-    	//this.map = new HashMap();
+        this.map = new LinkedHashMap();
         if (map != null) {
-            Iterator i = map.entrySet().iterator();
-            while (i.hasNext()) {
-                Map.Entry e = (Map.Entry)i.next();
-                Object value = e.getValue();
-                if (value != null) {
-                    super.put(e.getKey(), wrap(value));
-                }
-            }
+            	if(map
+						.entrySet() == null)System.err.println("Entry set is null!!!!"+ map.size());
+				Iterator i = map
+						.entrySet()
+						.iterator();
+				while (i.hasNext()) {
+				    Map.Entry e = (Map.Entry)i.next();
+				    Object value = e.getValue();
+				    if (value != null) {
+				        this.map.put(e.getKey(), wrap(value));
+				    }
+				}
         }
-    }
-
-    /**
-     * Put a key/value pair in the JSONObject, where the value will be a
-     * JSONObject which is produced from a Map.
-     * For put(k,JSONObject value) would be call by ref. unlike wrapped Map as above. 
-     * @param key   A key string.
-     * @param value A Map value.
-     * @return      this.
-     * @throws JSONException
-     */
-    public JSONObject put(String key, JSONObject value) throws JSONException {
-    	super.put(key,value);
-    	return this;
     }
 
 
@@ -367,8 +368,6 @@ public class JSONObject extends LinkedHashMap{
                     target = nextTarget;
                 }
                 target.put(path[last], bundle.getString((String)key));
-//                System.out.println("REMOVE:"+(String)key+" "+bundle.getString((String)key)+" "+this);
-                
             }
         }
     }
@@ -478,8 +477,7 @@ public class JSONObject extends LinkedHashMap{
             throw new JSONException("JSONObject[" + quote(key) +
                     "] not found.");
         }
-        return isNull(key)?null:object;
-//        return object;
+        return object;
     }
 
 
@@ -672,7 +670,7 @@ public class JSONObject extends LinkedHashMap{
      * @return      true if the key exists in the JSONObject.
      */
     public boolean has(String key) {
-        return super.containsKey(key);
+        return this.map.containsKey(key);
     }
 
 
@@ -712,7 +710,6 @@ public class JSONObject extends LinkedHashMap{
      *  the value is the JSONObject.NULL object.
      */
     public boolean isNull(String key) {
-//    	System.out.println("REMOVE:"+this.opt(key));
         return JSONObject.NULL.equals(this.opt(key));
     }
 
@@ -733,7 +730,7 @@ public class JSONObject extends LinkedHashMap{
      * @return A keySet.
      */
     public Set keySet() {
-        return super.keySet();
+        return this.map.keySet();
     }
 
 
@@ -743,7 +740,7 @@ public class JSONObject extends LinkedHashMap{
      * @return The number of keys in the JSONObject.
      */
     public int length() {
-        return super.size();
+        return this.map.size();
     }
 
 
@@ -797,7 +794,7 @@ public class JSONObject extends LinkedHashMap{
      * @return      An object which is the value, or null if there is no value.
      */
     public Object opt(String key) {
-        return key == null ? null : super.get(key);
+        return key == null ? null : this.map.get(key);
     }
 
 
@@ -1024,7 +1021,7 @@ public class JSONObject extends LinkedHashMap{
 
                         Object result = method.invoke(bean, (Object[])null);
                         if (result != null) {
-                            super.put(key, wrap(result));
+                            this.map.put(key, wrap(result));
                         }
                     }
                 }
@@ -1043,7 +1040,7 @@ public class JSONObject extends LinkedHashMap{
      * @throws JSONException If the key is null.
      */
     public JSONObject put(String key, boolean value) throws JSONException {
-        super.put(key, value ? Boolean.TRUE : Boolean.FALSE);
+        this.put(key, value ? Boolean.TRUE : Boolean.FALSE);
         return this;
     }
 
@@ -1057,8 +1054,10 @@ public class JSONObject extends LinkedHashMap{
      * @throws JSONException
      */
     public JSONObject put(String key, Collection value) throws JSONException {
-        if(value== null )value = new JSONArray();
-    	super.put(key, value);
+    	Collection v = null;
+    	if(value == null) v = new JSONArray();
+    	else v = value; //new JSONArray(v);
+    	this.map.put(key, v);
         return this;
     }
 
@@ -1072,7 +1071,7 @@ public class JSONObject extends LinkedHashMap{
      * @throws JSONException If the key is null or if the number is invalid.
      */
     public JSONObject put(String key, double value) throws JSONException {
-        super.put(key, new Double(value));
+        this.put(key, new Double(value));
         return this;
     }
 
@@ -1086,7 +1085,7 @@ public class JSONObject extends LinkedHashMap{
      * @throws JSONException If the key is null.
      */
     public JSONObject put(String key, int value) throws JSONException {
-        super.put(key, new Integer(value));
+        this.put(key, new Integer(value));
         return this;
     }
 
@@ -1114,8 +1113,10 @@ public class JSONObject extends LinkedHashMap{
      * @throws JSONException
      */
     public JSONObject put(String key, Map value) throws JSONException {
-        if(value == null )value= new JSONObject();
-    	super.put(key, value);
+       Map v = null;
+    	if(value ==null)v = new JSONObject();
+    	else v =  value;//new JSONObject(value);
+    	this.map.put(key, v);
         return this;
     }
 
@@ -1125,19 +1126,29 @@ public class JSONObject extends LinkedHashMap{
      * then the key will be removed from the JSONObject if it is present.
      * @param key   A key string.
      * @param value An object which is the value. It should be of one of these
-     *  types: Boolean, Double, Integer, JSONArray, <strike>JSONObject,</strike> Long, String,
+     *  types: Boolean, Double, Integer, JSONArray, JSONObject, Long, String,
      *  or the JSONObject.NULL object.
      * @return this.
      * @throws JSONException If the value is non-finite number
      *  or if the key is null.
      */
     public JSONObject put(String key, Object value) throws JSONException {
+        String pooled;
         if (key == null) {
             throw new JSONException("Null key.");
         }
         if (value != null) {
             testValidity(value);
-            super.put(key, value);
+            pooled = (String)keyPool.get(key);
+            if (pooled == null) {
+                if (keyPool.size() >= keyPoolSize) {
+                    keyPool = new HashMap(keyPoolSize);
+                }
+                keyPool.put(key, key);
+            } else {
+                key = pooled;
+            }
+            this.map.put(key, value);
         } else {
             this.remove(key);
         }
@@ -1269,7 +1280,7 @@ public class JSONObject extends LinkedHashMap{
      * or null if there was no value.
      */
     public Object remove(String key) {
-        return super.remove(key);
+        return this.map.remove(key);
     }
 
     /**
@@ -1292,15 +1303,15 @@ public class JSONObject extends LinkedHashMap{
         if (string.equalsIgnoreCase("null")) {
             return JSONObject.NULL;
         }
-//
-//        /*
-//         * If it might be a number, try converting it.
-//         * If a number cannot be produced, then the value will just
-//         * be a string. Note that the plus and implied string
-//         * conventions are non-standard. A JSON parser may accept
-//         * non-JSON forms as long as it accepts all correct JSON forms.
-//         */
-//
+
+        /*
+         * If it might be a number, try converting it.
+         * If a number cannot be produced, then the value will just
+         * be a string. Note that the plus and implied string
+         * conventions are non-standard. A JSON parser may accept
+         * non-JSON forms as long as it accepts all correct JSON forms.
+         */
+
         char b = string.charAt(0);
         if ((b >= '0' && b <= '9') || b == '.' || b == '-' || b == '+') {
             try {
@@ -1593,7 +1604,7 @@ public class JSONObject extends LinkedHashMap{
                 if (indentFactor > 0) {
                     writer.write(' ');
                 }
-                writeValue(writer, super.get(key), indentFactor, indent);
+                writeValue(writer, this.map.get(key), indentFactor, indent);
             } else if (length != 0) {
                 final int newindent = indent + indentFactor;
                 while (keys.hasNext()) {
@@ -1610,7 +1621,7 @@ public class JSONObject extends LinkedHashMap{
                     if (indentFactor > 0) {
                         writer.write(' ');
                     }
-                    writeValue(writer, super.get(key), indentFactor,
+                    writeValue(writer, this.map.get(key), indentFactor,
                             newindent);
                     commanate = true;
                 }
@@ -1625,4 +1636,70 @@ public class JSONObject extends LinkedHashMap{
             throw new JSONException(exception);
         }
      }
+
+
+	@Override
+	public int size() {
+		return this.map.size();
+	}
+
+
+	@Override
+	public boolean isEmpty() {
+		return this.map.isEmpty();
+	}
+
+
+	@Override
+	public boolean containsKey(Object key) {
+		return this.map.containsKey(key);
+	}
+
+
+	@Override
+	public boolean containsValue(Object value) {
+		return this.map.containsValue(value);
+	}
+
+
+	@Override
+	public Object get(Object key) {
+		return this.map.get(key);
+	}
+
+
+	@Override
+	public Object put(Object key, Object value) {
+		return this.map.put(key, value);
+	}
+
+
+	@Override
+	public Object remove(Object key) {
+		return this.map.remove(key);
+	}
+
+
+	@Override
+	public void putAll(Map m) {
+		this.map.putAll(m);
+	}
+
+
+	@Override
+	public void clear() {
+		this.map.clear();
+	}
+
+
+	@Override
+	public Collection values() {
+		return this.map.values();
+	}
+
+
+	@Override
+	public Set entrySet() {
+		return this.map.entrySet();
+	}
 }

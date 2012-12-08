@@ -32,8 +32,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -93,7 +93,7 @@ import java.util.Set;
  * @author JSON.org
  * @version 2012-10-27
  */
-public class JSONObject extends HashMap{
+public class JSONObject extends LinkedHashMap{
 
     /**
      * JSONObject.NULL is equivalent to the value that JavaScript calls null,
@@ -240,7 +240,7 @@ public class JSONObject extends HashMap{
      * @throws JSONException
      */
     public JSONObject(Map map) {
-       super();
+//       super(map == null? new JSONObject():map ); //dont it needs to be wrapped
     	//this.map = new HashMap();
         if (map != null) {
             Iterator i = map.entrySet().iterator();
@@ -252,6 +252,20 @@ public class JSONObject extends HashMap{
                 }
             }
         }
+    }
+
+    /**
+     * Put a key/value pair in the JSONObject, where the value will be a
+     * JSONObject which is produced from a Map.
+     * For put(k,JSONObject value) would be call by ref. unlike wrapped Map as above. 
+     * @param key   A key string.
+     * @param value A Map value.
+     * @return      this.
+     * @throws JSONException
+     */
+    public JSONObject put(String key, JSONObject value) throws JSONException {
+    	super.put(key,value);
+    	return this;
     }
 
 
@@ -353,6 +367,8 @@ public class JSONObject extends HashMap{
                     target = nextTarget;
                 }
                 target.put(path[last], bundle.getString((String)key));
+//                System.out.println("REMOVE:"+(String)key+" "+bundle.getString((String)key)+" "+this);
+                
             }
         }
     }
@@ -696,7 +712,7 @@ public class JSONObject extends HashMap{
      *  the value is the JSONObject.NULL object.
      */
     public boolean isNull(String key) {
-    	System.out.println("REMOVE:"+this.opt(key));
+//    	System.out.println("REMOVE:"+this.opt(key));
         return JSONObject.NULL.equals(this.opt(key));
     }
 
@@ -1098,7 +1114,8 @@ public class JSONObject extends HashMap{
      * @throws JSONException
      */
     public JSONObject put(String key, Map value) throws JSONException {
-        super.put(key, new JSONObject(value));
+        if(value == null )value= new JSONObject();
+    	super.put(key, value);
         return this;
     }
 
@@ -1108,7 +1125,7 @@ public class JSONObject extends HashMap{
      * then the key will be removed from the JSONObject if it is present.
      * @param key   A key string.
      * @param value An object which is the value. It should be of one of these
-     *  types: Boolean, Double, Integer, JSONArray, JSONObject, Long, String,
+     *  types: Boolean, Double, Integer, JSONArray, <strike>JSONObject,</strike> Long, String,
      *  or the JSONObject.NULL object.
      * @return this.
      * @throws JSONException If the value is non-finite number
