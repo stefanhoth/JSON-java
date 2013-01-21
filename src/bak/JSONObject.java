@@ -32,7 +32,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Locale;
@@ -92,21 +91,9 @@ import java.util.Set;
  * </ul>
  *
  * @author JSON.org
- * @version 2012-12-01
+ * @version 2012-10-27
  */
-public class JSONObject implements Map {
-    /**
-     * The maximum number of keys in the key pool.
-     */
-     private static final int keyPoolSize = 100;
-
-   /**
-     * Key pooling is like string interning, but without permanently tying up
-     * memory. To help conserve memory, storage of duplicated key strings in
-     * JSONObjects will be avoided by using a key pool to manage unique key
-     * string objects. This is used by JSONObject.put(string, object).
-     */
-     private static HashMap keyPool = new HashMap(keyPoolSize);
+public class JSONObject extends LinkedHashMap{
 
     /**
      * JSONObject.NULL is equivalent to the value that JavaScript calls null,
@@ -147,7 +134,7 @@ public class JSONObject implements Map {
     /**
      * The map where the JSONObject's properties are kept.
      */
-    private final Map map;
+//    private final Map map;
 
 
     /**
@@ -163,7 +150,8 @@ public class JSONObject implements Map {
      * Construct an empty JSONObject.
      */
     public JSONObject() {
-        this.map = new LinkedHashMap();
+    	super();
+    	// this.map = new LinkedHashMap();
     }
 
 
@@ -252,21 +240,32 @@ public class JSONObject implements Map {
      * @throws JSONException
      */
     public JSONObject(Map map) {
-        this.map = new LinkedHashMap();
+//       super(map == null? new JSONObject():map ); //dont it needs to be wrapped
+    	//this.map = new HashMap();
         if (map != null) {
-            	if(map
-						.entrySet() == null)System.err.println("Entry set is null!!!!"+ map.size());
-				Iterator i = map
-						.entrySet()
-						.iterator();
-				while (i.hasNext()) {
-				    Map.Entry e = (Map.Entry)i.next();
-				    Object value = e.getValue();
-				    if (value != null) {
-				        this.map.put(e.getKey(), wrap(value));
-				    }
-				}
+            Iterator i = map.entrySet().iterator();
+            while (i.hasNext()) {
+                Map.Entry e = (Map.Entry)i.next();
+                Object value = e.getValue();
+                if (value != null) {
+                    super.put(e.getKey(), wrap(value));
+                }
+            }
         }
+    }
+
+    /**
+     * Put a key/value pair in the JSONObject, where the value will be a
+     * JSONObject which is produced from a Map.
+     * For put(k,JSONObject value) would be call by ref. unlike wrapped Map as above. 
+     * @param key   A key string.
+     * @param value A Map value.
+     * @return      this.
+     * @throws JSONException
+     */
+    public JSONObject put(String key, JSONObject value) throws JSONException {
+    	super.put(key,value);
+    	return this;
     }
 
 
@@ -368,6 +367,8 @@ public class JSONObject implements Map {
                     target = nextTarget;
                 }
                 target.put(path[last], bundle.getString((String)key));
+//                System.out.println("REMOVE:"+(String)key+" "+bundle.getString((String)key)+" "+this);
+                
             }
         }
     }
@@ -477,7 +478,8 @@ public class JSONObject implements Map {
             throw new JSONException("JSONObject[" + quote(key) +
                     "] not found.");
         }
-        return object;
+        return isNull(key)?null:object;
+//        return object;
     }
 
 
@@ -670,7 +672,7 @@ public class JSONObject implements Map {
      * @return      true if the key exists in the JSONObject.
      */
     public boolean has(String key) {
-        return this.map.containsKey(key);
+        return super.containsKey(key);
     }
 
 
@@ -710,6 +712,7 @@ public class JSONObject implements Map {
      *  the value is the JSONObject.NULL object.
      */
     public boolean isNull(String key) {
+//    	System.out.println("REMOVE:"+this.opt(key));
         return JSONObject.NULL.equals(this.opt(key));
     }
 
@@ -730,7 +733,7 @@ public class JSONObject implements Map {
      * @return A keySet.
      */
     public Set keySet() {
-        return this.map.keySet();
+        return super.keySet();
     }
 
 
@@ -740,7 +743,7 @@ public class JSONObject implements Map {
      * @return The number of keys in the JSONObject.
      */
     public int length() {
-        return this.map.size();
+        return super.size();
     }
 
 
@@ -794,7 +797,7 @@ public class JSONObject implements Map {
      * @return      An object which is the value, or null if there is no value.
      */
     public Object opt(String key) {
-        return key == null ? null : this.map.get(key);
+        return key == null ? null : super.get(key);
     }
 
 
@@ -1021,7 +1024,7 @@ public class JSONObject implements Map {
 
                         Object result = method.invoke(bean, (Object[])null);
                         if (result != null) {
-                            this.map.put(key, wrap(result));
+                            super.put(key, wrap(result));
                         }
                     }
                 }
@@ -1040,7 +1043,7 @@ public class JSONObject implements Map {
      * @throws JSONException If the key is null.
      */
     public JSONObject put(String key, boolean value) throws JSONException {
-        this.put(key, value ? Boolean.TRUE : Boolean.FALSE);
+        super.put(key, value ? Boolean.TRUE : Boolean.FALSE);
         return this;
     }
 
@@ -1054,10 +1057,8 @@ public class JSONObject implements Map {
      * @throws JSONException
      */
     public JSONObject put(String key, Collection value) throws JSONException {
-    	Collection v = null;
-    	if(value == null) v = new JSONArray();
-    	else v = value; //new JSONArray(v);
-    	this.map.put(key, v);
+        if(value== null )value = new JSONArray();
+    	super.put(key, value);
         return this;
     }
 
@@ -1071,7 +1072,7 @@ public class JSONObject implements Map {
      * @throws JSONException If the key is null or if the number is invalid.
      */
     public JSONObject put(String key, double value) throws JSONException {
-        this.put(key, new Double(value));
+        super.put(key, new Double(value));
         return this;
     }
 
@@ -1085,7 +1086,7 @@ public class JSONObject implements Map {
      * @throws JSONException If the key is null.
      */
     public JSONObject put(String key, int value) throws JSONException {
-        this.put(key, new Integer(value));
+        super.put(key, new Integer(value));
         return this;
     }
 
@@ -1113,10 +1114,8 @@ public class JSONObject implements Map {
      * @throws JSONException
      */
     public JSONObject put(String key, Map value) throws JSONException {
-       Map v = null;
-    	if(value ==null)v = new JSONObject();
-    	else v =  value;//new JSONObject(value);
-    	this.map.put(key, v);
+        if(value == null )value= new JSONObject();
+    	super.put(key, value);
         return this;
     }
 
@@ -1126,29 +1125,19 @@ public class JSONObject implements Map {
      * then the key will be removed from the JSONObject if it is present.
      * @param key   A key string.
      * @param value An object which is the value. It should be of one of these
-     *  types: Boolean, Double, Integer, JSONArray, JSONObject, Long, String,
+     *  types: Boolean, Double, Integer, JSONArray, <strike>JSONObject,</strike> Long, String,
      *  or the JSONObject.NULL object.
      * @return this.
      * @throws JSONException If the value is non-finite number
      *  or if the key is null.
      */
     public JSONObject put(String key, Object value) throws JSONException {
-        String pooled;
         if (key == null) {
             throw new JSONException("Null key.");
         }
         if (value != null) {
             testValidity(value);
-            pooled = (String)keyPool.get(key);
-            if (pooled == null) {
-                if (keyPool.size() >= keyPoolSize) {
-                    keyPool = new HashMap(keyPoolSize);
-                }
-                keyPool.put(key, key);
-            } else {
-                key = pooled;
-            }
-            this.map.put(key, value);
+            super.put(key, value);
         } else {
             this.remove(key);
         }
@@ -1280,7 +1269,7 @@ public class JSONObject implements Map {
      * or null if there was no value.
      */
     public Object remove(String key) {
-        return this.map.remove(key);
+        return super.remove(key);
     }
 
     /**
@@ -1303,15 +1292,15 @@ public class JSONObject implements Map {
         if (string.equalsIgnoreCase("null")) {
             return JSONObject.NULL;
         }
-
-        /*
-         * If it might be a number, try converting it.
-         * If a number cannot be produced, then the value will just
-         * be a string. Note that the plus and implied string
-         * conventions are non-standard. A JSON parser may accept
-         * non-JSON forms as long as it accepts all correct JSON forms.
-         */
-
+//
+//        /*
+//         * If it might be a number, try converting it.
+//         * If a number cannot be produced, then the value will just
+//         * be a string. Note that the plus and implied string
+//         * conventions are non-standard. A JSON parser may accept
+//         * non-JSON forms as long as it accepts all correct JSON forms.
+//         */
+//
         char b = string.charAt(0);
         if ((b >= '0' && b <= '9') || b == '.' || b == '-' || b == '+') {
             try {
@@ -1604,7 +1593,7 @@ public class JSONObject implements Map {
                 if (indentFactor > 0) {
                     writer.write(' ');
                 }
-                writeValue(writer, this.map.get(key), indentFactor, indent);
+                writeValue(writer, super.get(key), indentFactor, indent);
             } else if (length != 0) {
                 final int newindent = indent + indentFactor;
                 while (keys.hasNext()) {
@@ -1621,7 +1610,7 @@ public class JSONObject implements Map {
                     if (indentFactor > 0) {
                         writer.write(' ');
                     }
-                    writeValue(writer, this.map.get(key), indentFactor,
+                    writeValue(writer, super.get(key), indentFactor,
                             newindent);
                     commanate = true;
                 }
@@ -1636,70 +1625,4 @@ public class JSONObject implements Map {
             throw new JSONException(exception);
         }
      }
-
-
-	@Override
-	public int size() {
-		return this.map.size();
-	}
-
-
-	@Override
-	public boolean isEmpty() {
-		return this.map.isEmpty();
-	}
-
-
-	@Override
-	public boolean containsKey(Object key) {
-		return this.map.containsKey(key);
-	}
-
-
-	@Override
-	public boolean containsValue(Object value) {
-		return this.map.containsValue(value);
-	}
-
-
-	@Override
-	public Object get(Object key) {
-		return this.map.get(key);
-	}
-
-
-	@Override
-	public Object put(Object key, Object value) {
-		return this.map.put(key, value);
-	}
-
-
-	@Override
-	public Object remove(Object key) {
-		return this.map.remove(key);
-	}
-
-
-	@Override
-	public void putAll(Map m) {
-		this.map.putAll(m);
-	}
-
-
-	@Override
-	public void clear() {
-		this.map.clear();
-	}
-
-
-	@Override
-	public Collection values() {
-		return this.map.values();
-	}
-
-
-	@Override
-	public Set entrySet() {
-		return this.map.entrySet();
-	}
 }

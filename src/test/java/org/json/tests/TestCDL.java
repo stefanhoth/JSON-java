@@ -320,18 +320,45 @@ public class TestCDL extends TestCase
         {
             jsonarray = CDL
                     .toJSONArray("Comma delimited list test, '\"Strip\"Quotes', 'quote, comma', No quotes, 'Single Quotes', \"Double Quotes\"\n1,'2',\"3\"\n,'It is \"good,\"', \"It works.\"\n\n");
-
+            
             string = CDL.toString(jsonarray);
+//            System.out.println( "\"quote, comma\",\"StripQuotes\",Comma delimited list test\n"
+//                            + "3,2,1\n" + "It works.,\"It is good,\",\n");
             assertEquals(
-                    "\"quote, comma\",\"StripQuotes\",Comma delimited list test\n"
-                            + "3,2,1\n" + "It works.,\"It is good,\",\n",
+                    "Comma delimited list test,\"StripQuotes\",\"quote, comma\"\n" + 
+                    "1,2,3\n" + 
+                    ",\"It is good,\",It works.\n",
                     string);
+            //System.out.println([\n {\n  \"quote, comma\": \"3\",\n  \"\\\"Strip\\\"Quotes\": \"2\",\n  \"Comma delimited list test\": \"1\"\n },\n {\n  \"quote, comma\": \"It works.\",\n  \"\\\"Strip\\\"Quotes\": \"It is \\\"good,\\\"\",\n  \"Comma delimited list test\": \"\"\n }\n]);
             assertEquals(
-                    "[\n {\n  \"quote, comma\": \"3\",\n  \"\\\"Strip\\\"Quotes\": \"2\",\n  \"Comma delimited list test\": \"1\"\n },\n {\n  \"quote, comma\": \"It works.\",\n  \"\\\"Strip\\\"Quotes\": \"It is \\\"good,\\\"\",\n  \"Comma delimited list test\": \"\"\n }\n]",
+                    "[\n" + 
+                    " {\n" + 
+                    "  \"Comma delimited list test\": \"1\",\n" + 
+                    "  \"\\\"Strip\\\"Quotes\": \"2\",\n" + 
+                    "  \"quote, comma\": \"3\"\n" + 
+                    " },\n" + 
+                    " {\n" + 
+                    "  \"Comma delimited list test\": \"\",\n" + 
+                    "  \"\\\"Strip\\\"Quotes\": \"It is \\\"good,\\\"\",\n" + 
+                    "  \"quote, comma\": \"It works.\"\n" + 
+                    " }\n" + 
+                    "]",
                     jsonarray.toString(1));
             jsonarray = CDL.toJSONArray(string);
+            //"[\n {\n  \"quote, comma\": \"3\",\n  \"StripQuotes\": \"2\",\n  \"Comma delimited list test\": \"1\"\n },\n {\n  \"quote, comma\": \"It works.\",\n  \"StripQuotes\": \"It is good,\",\n  \"Comma delimited list test\": \"\"\n }\n]"
             assertEquals(
-                    "[\n {\n  \"quote, comma\": \"3\",\n  \"StripQuotes\": \"2\",\n  \"Comma delimited list test\": \"1\"\n },\n {\n  \"quote, comma\": \"It works.\",\n  \"StripQuotes\": \"It is good,\",\n  \"Comma delimited list test\": \"\"\n }\n]",
+                    "[\n" + 
+                    " {\n" + 
+                    "  \"Comma delimited list test\": \"1\",\n" + 
+                    "  \"StripQuotes\": \"2\",\n" + 
+                    "  \"quote, comma\": \"3\"\n" + 
+                    " },\n" + 
+                    " {\n" + 
+                    "  \"Comma delimited list test\": \"\",\n" + 
+                    "  \"StripQuotes\": \"It is good,\",\n" + 
+                    "  \"quote, comma\": \"It works.\"\n" + 
+                    " }\n" + 
+                    "]",
                     jsonarray.toString(1));
         } catch (JSONException e)
         {

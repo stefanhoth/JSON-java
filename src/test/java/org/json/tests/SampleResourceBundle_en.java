@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * The Class SampleResourceBundle_en_US.
  */
-public class SampleResourceBundle_en_US extends ListResourceBundle {
+public class SampleResourceBundle_en extends ListResourceBundle {
     
     /* (non-Javadoc)
      * @see java.util.ListResourceBundle#getContents()
@@ -24,6 +24,6 @@ public class SampleResourceBundle_en_US extends ListResourceBundle {
         { "ASCII", "American Standard Code for Information Interchange" },
         { "JAVA.desc", "Just Another Vague Acronym" },
         { "JAVA.data", "Sweet language" },
-        { "JSON", "JavaScript Object Notation" }
+        { "JSON", "JavaScript Object Notation" },
     };
 }

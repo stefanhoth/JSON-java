@@ -30,9 +30,6 @@ import java.io.Writer;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 
 /**
@@ -81,20 +78,21 @@ import java.util.Map;
  * @author JSON.org
  * @version 2012-11-13
  */
-public class JSONArray implements List{
+public class JSONArray extends ArrayList{
 
 
     /**
      * The arrayList where the JSONArray's properties are kept.
      */
-    private final ArrayList myArrayList;
+//    private final ArrayList myArrayList;
 
 
     /**
      * Construct an empty JSONArray.
      */
     public JSONArray() {
-        this.myArrayList = new ArrayList();
+    	super();
+//        this.myArrayList = new ArrayList();
     }
 
     /**
@@ -112,10 +110,10 @@ public class JSONArray implements List{
             for (;;) {
                 if (x.nextClean() == ',') {
                     x.back();
-                    this.myArrayList.add(JSONObject.NULL);
+                    super.add(JSONObject.NULL);
                 } else {
                     x.back();
-                    this.myArrayList.add(x.nextValue());
+                    super.add(x.nextValue());
                 }
                 switch (x.nextClean()) {
                 case ';':
@@ -152,13 +150,15 @@ public class JSONArray implements List{
      * @param collection     A Collection.
      */
     public JSONArray(Collection collection) {
-        this.myArrayList = new ArrayList();
-        if (collection != null) {
-            Iterator iter = collection.iterator();
-            while (iter.hasNext()) {
-                this.myArrayList.add(JSONObject.wrap(iter.next()));
-            }
-        }
+        super((collection == null)?new ArrayList():collection);
+//    	if(collection == null)collection = new ArrayList();
+////    	this.myArrayList = new ArrayList();
+//        if (collection != null) {
+//            Iterator iter = collection.iterator();
+//            while (iter.hasNext()) {
+//                super.add(JSONObject.wrap(iter.next()));
+//            }
+//        }
     }
 
 
@@ -357,7 +357,7 @@ public class JSONArray implements List{
             if (i > 0) {
                 sb.append(separator);
             }
-            sb.append(JSONObject.valueToString(this.myArrayList.get(i)));
+            sb.append(JSONObject.valueToString(super.get(i)));
         }
         return sb.toString();
     }
@@ -369,7 +369,7 @@ public class JSONArray implements List{
      * @return The length (or size).
      */
     public int length() {
-        return this.myArrayList.size();
+        return super.size();
     }
 
 
@@ -382,7 +382,7 @@ public class JSONArray implements List{
     public Object opt(int index) {
         return (index < 0 || index >= this.length())
             ? null
-            : this.myArrayList.get(index);
+            : super.get(index);
     }
 
 
@@ -582,11 +582,20 @@ public class JSONArray implements List{
      * @return      this.
      */
     public JSONArray put(Collection value) {
-        Collection v = null;
-    	if(value == null )v = new JSONArray();
-        else v = value;//new JSONArray(value);
-        this.myArrayList.add(v);
+        super.add(new JSONArray(value));
         return this;
+    }
+    
+    /**
+     * Put a value in the JSONArray, where the value will be a
+     * JSONArray which is produced from a Collection.
+     * Do not wrap JSONArray, pass by ref
+     * @param value A Collection value.
+     * @return      this.
+     */
+    public JSONArray put(JSONArray value) {
+    	super.add(value);
+    	return this;
     }
 
 
@@ -636,23 +645,35 @@ public class JSONArray implements List{
      * @return      this.
      */
     public JSONArray put(Map value) {
-        Map v = null;
-    	if(value == null)v = new JSONObject();
-    	else v = value;//new JSONObject(value);
-    	this.myArrayList.add(v);
+    	if(value == null )value = new JSONObject();
+        super.add(new JSONObject(value));
         return this;
+    }
+    
+    /**
+     * samarjit for jsonobject same ref rather than a copy, in earlier
+     * version this jsonarray.put usually went to jsonarray.put(Object)
+     * Put a value in the JSONArray, where the value will be a
+     * JSONObject which is produced from a Map.
+     * @param value A Map value.
+     * @return      this.
+     */
+    public JSONArray put(JSONObject value) {
+    	if(value == null )value = new JSONObject();
+    	super.add(value);
+    	return this;
     }
 
 
     /**
      * Append an object value. This increases the array's length by one.
      * @param value An object value.  The value should be a
-     *  Boolean, Double, Integer, JSONArray, JSONObject, Long, or String, or the
+     *  Boolean, Double, Integer, JSONArray,<strike> JSONObject,</strike> Long, or String, or the
      *  JSONObject.NULL object.
      * @return this.
      */
     public JSONArray put(Object value) {
-        this.myArrayList.add(value);
+        super.add(value);
         return this;
     }
 
@@ -682,24 +703,20 @@ public class JSONArray implements List{
      * not finite.
      */
     public JSONArray put(int index, Collection value) throws JSONException {
-    	Collection v = null;
-    	if(value == null) v = new JSONArray();
-    	else v = new JSONArray(value);
-
-    	JSONObject.testValidity(v);
+//        this.put(index, new JSONArray(value));
+        JSONObject.testValidity(value);
         if (index < 0) {
             throw new JSONException("JSONArray[" + index + "] not found.");
         }
         if (index < this.length()) {
-            this.myArrayList.set(index, v);
+            super.set(index, new JSONArray(value));
         } else {
             while (index != this.length()) {
                 this.put(JSONObject.NULL);
             }
-            this.put(v);
+            this.put(value);
         }
         return this;
-        
     }
 
 
@@ -759,23 +776,18 @@ public class JSONArray implements List{
      *  an invalid number.
      */
     public JSONArray put(int index, Map value) throws JSONException {
-    	Map v = null;
-    	if(value == null)v = new JSONObject();
-    	else v = new JSONObject(value);
-    	
-    	JSONObject.testValidity(v);
-        if (index < 0) {
-            throw new JSONException("JSONArray[" + index + "] not found.");
-        }
-        if (index < this.length()) {
-            this.myArrayList.set(index, v);
-        } else {
-            while (index != this.length()) {
-                this.put(JSONObject.NULL);
-            }
-            this.put(v);
-        }
-        
+    	 JSONObject.testValidity(value);
+         if (index < 0) {
+             throw new JSONException("JSONArray[" + index + "] not found.");
+         }
+         if (index < this.length()) {
+             super.set(index, new JSONObject(value));
+         } else {
+             while (index != this.length()) {
+                 this.put(JSONObject.NULL);
+             }
+             this.put(value);
+         }
         return this;
     }
 
@@ -798,7 +810,7 @@ public class JSONArray implements List{
             throw new JSONException("JSONArray[" + index + "] not found.");
         }
         if (index < this.length()) {
-            this.myArrayList.set(index, value);
+            super.set(index, value);
         } else {
             while (index != this.length()) {
                 this.put(JSONObject.NULL);
@@ -817,7 +829,7 @@ public class JSONArray implements List{
      */
     public Object remove(int index) {
         Object o = this.opt(index);
-        this.myArrayList.remove(index);
+        super.remove(index);
         return o;
     }
 
@@ -915,7 +927,7 @@ public class JSONArray implements List{
             writer.write('[');
 
             if (length == 1) {
-                JSONObject.writeValue(writer, this.myArrayList.get(0),
+                JSONObject.writeValue(writer, super.get(0),
                         indentFactor, indent);
             } else if (length != 0) {
                 final int newindent = indent + indentFactor;
@@ -928,7 +940,7 @@ public class JSONArray implements List{
                         writer.write('\n');
                     }
                     JSONObject.indent(writer, newindent);
-                    JSONObject.writeValue(writer, this.myArrayList.get(i),
+                    JSONObject.writeValue(writer, super.get(i),
                             indentFactor, newindent);
                     commanate = true;
                 }
@@ -943,112 +955,4 @@ public class JSONArray implements List{
            throw new JSONException(e);
         }
     }
-
-	@Override
-	public int size() {
-		return myArrayList.size();
-	}
-
-	@Override
-	public boolean isEmpty() {
-		return myArrayList.isEmpty();
-	}
-
-	@Override
-	public boolean contains(Object o) {
-		return myArrayList.contains(o);
-	}
-
-	@Override
-	public Iterator<Object> iterator() {
-		return myArrayList.iterator();
-	}
-
-	@Override
-	public Object[] toArray() {
-		return myArrayList.toArray();
-	}
-
-
-	@Override
-	public boolean add(Object e) {
-		return this.put(e) != null;
-	}
-
-	@Override
-	public boolean remove(Object o) {
-		return myArrayList.remove(o);
-	}
-
-	@Override
-	public boolean containsAll(Collection c) {
-		return myArrayList.containsAll(c);
-	}
-
-	@Override
-	public boolean addAll(Collection c) {
-		return this.put(c) != null;
-	}
-
-	@Override
-	public boolean addAll(int index, Collection c) {
-		return this.put(index, c) != null;
-	}
-
-	@Override
-	public boolean removeAll(Collection  c) {
-		return myArrayList.removeAll(c);
-	}
-
-	@Override
-	public boolean retainAll(Collection  c) {
-		return myArrayList.retainAll(c);
-	}
-
-	@Override
-	public void clear() {
-		myArrayList.clear();
-	}
-
-	@Override
-	public Object set(int index, Object element) {
-		return this.put(index, element);
-	}
-
-	@Override
-	public void add(int index, Object element) {
-		this.put(index, element);
-	}
-
-	@Override
-	public int indexOf(Object o) {
-		return myArrayList.indexOf(o);
-	}
-
-	@Override
-	public int lastIndexOf(Object o) {
-		return myArrayList.lastIndexOf(o);
-	}
-
-	@Override
-	public ListIterator listIterator() {
-		return myArrayList.listIterator();
-	}
-
-	@Override
-	public ListIterator listIterator(int index) {
-		return myArrayList.listIterator(index);
-	}
-
-	@Override
-	public List subList(int fromIndex, int toIndex) {
-		return myArrayList.subList(fromIndex, toIndex);
-	}
-
-	@Override
-	public Object[] toArray(Object[] a) {
-		return myArrayList.toArray(a);
-	}
-
-	 
 }

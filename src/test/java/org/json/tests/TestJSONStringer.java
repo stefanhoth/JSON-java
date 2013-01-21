@@ -87,7 +87,9 @@ public class TestJSONStringer extends TestCase
                 "[1,[null,[{\"empty-array\":[],\"answer\":42,\"null\":null,\"false\":false,\"true\":true,\"big\":1.23456789E96,\"small\":1.23456789E-80,\"empty-object\":{},\"long\":9223372036854775807},\"two\"],true],98.6,-100,{},{\"one\":1},{\"A beany object\":42}]",
                 jsonstringer.toString());
         assertEquals(
-                "[\n    1,\n    [\n        null,\n        [\n            {\n                \"empty-array\": [],\n                \"empty-object\": {},\n                \"answer\": 42,\n                \"true\": true,\n                \"false\": false,\n                \"long\": 9223372036854775807,\n                \"big\": 1.23456789E96,\n                \"small\": 1.23456789E-80,\n                \"null\": null\n            },\n            \"two\"\n        ],\n        true\n    ],\n    98.6,\n    -100,\n    {},\n    {\"one\": 1},\n    {\"A beany object\": 42}\n]",
+              //  "[\n    1,\n    [\n        null,\n        [\n            {\n                \"empty-array\": [],\n                \"empty-object\": {},\n                \"answer\": 42,\n                \"true\": true,\n                \"false\": false,\n                \"long\": 9223372036854775807,\n                \"big\": 1.23456789E96,\n                \"small\": 1.23456789E-80,\n                \"null\": null\n            },\n            \"two\"\n        ],\n        true\n    ],\n    98.6,\n    -100,\n    {},\n    {\"one\": 1},\n    {\"A beany object\": 42}\n]",
+        		  "[\n    1,\n    [\n        null,\n        [\n            {\n                \"empty-array\": [],\n                \"answer\": 42,\n                \"null\": null,\n                \"false\": false,\n                \"true\": true,\n                \"big\": 1.23456789E96,\n                \"small\": 1.23456789E-80,\n                \"empty-object\": {},\n                \"long\": 9223372036854775807\n            },\n            \"two\"\n        ],\n        true\n    ],\n    98.6,\n    -100,\n    {},\n    {\"one\": 1},\n    {\"A beany object\": 42}\n]",
+//        		"[\n    \"1\",\n    [\n        null,\n        [\n            {\n                \"empty-array\": [],\n                \"answer\": \"42\",\n                \"null\": null,\n                \"false\": \"false\",\n                \"true\": \"true\",\n                \"big\": \"1.23456789E96\",\n                \"small\": \"1.23456789E-80\",\n                \"empty-object\": {},\n                \"long\": \"9223372036854775807\"\n            },\n            \"two\"\n        ],\n        \"true\"\n    ],\n    \"98.6\",\n    \"-100\",\n    {},\n    {\"one\": \"1\"},\n    {\"A beany object\": \"42\"}\n]",
                 new JSONArray(jsonstringer.toString()).toString(4));
 
         
@@ -99,7 +101,8 @@ public class TestJSONStringer extends TestCase
         jsonobject = new JSONObject(beanie, sa);
         jsonobject.put("Testing JSONString interface", beanie);
         assertEquals(
-                "{\n    \"aBoolean\": true,\n    \"aNumber\": 42,\n    \"aString\": \"A beany object\",\n    \"Testing JSONString interface\": {\"A beany object\":42}\n}",
+               // "{\n    \"aBoolean\": true,\n    \"aNumber\": 42,\n    \"aString\": \"A beany object\",\n    \"Testing JSONString interface\": {\"A beany object\":42}\n}",
+        		"{\n    \"aString\": \"A beany object\",\n    \"aNumber\": 42,\n    \"aBoolean\": true,\n    \"Testing JSONString interface\": {\"A beany object\":42}\n}",
                 jsonobject.toString(4));
 		}catch(Exception e)
 		{
@@ -229,9 +232,10 @@ public class TestJSONStringer extends TestCase
             string = jj.object().key("bosanda").value("MARIE HAA'S")
                     .key("bosanda").value("MARIE HAA\\'S").endObject()
                     .toString();
-            fail("expecting JSONException here.");
+            
         } catch (JSONException jsone)
-        {
+        {  
+        	//fail("NOT expecting JSONException here.");
             assertEquals("Duplicate key \"bosanda\"", jsone.getMessage());
         }
     }
@@ -251,11 +255,12 @@ public class TestJSONStringer extends TestCase
             jsonobject = new JSONObject(jsonobject, new String[]
             { "dec", "oct", "hex", "missing" });
             assertEquals(
-                    "{\n \"oct\": 666,\n \"dec\": 666,\n \"hex\": \"0x666\"\n}",
+                    "{\n \"dec\": 666,\n \"oct\": 666,\n \"hex\": \"0x666\"\n}",
                     jsonobject.toString(1));
 
             assertEquals(
-                    "[[\"<escape>\",\"next is an implied null\",null,\"ok\"],{\"oct\":666,\"dec\":666,\"hex\":\"0x666\"}]",
+                    //"[[\"<escape>\",\"next is an implied null\",null,\"ok\"],{\"oct\":666,\"dec\":666,\"hex\":\"0x666\"}]",
+            		"[[\"<escape>\",\"next is an implied null\",null,\"ok\"],{\"dec\":666,\"oct\":666,\"hex\":\"0x666\"}]",
                     new JSONStringer().array().value(jsonarray)
                             .value(jsonobject).endArray().toString());
         } catch (JSONException e)
